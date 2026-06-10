@@ -3,20 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>A Message For Rahul</title>
-    <!-- Google Fonts for Premium Typography -->
+    <title>A Special Message</title>
+    <!-- Premium Editorial Typography -->
     <link rel="preconnect" href="https://googleapis.com">
     <link rel="preconnect" href="https://gstatic.com" crossorigin>
-    <link href="https://googleapis.com/css2?family=Cormorant+Garamond:ital,wght@1,400;1,600&family=Inter:wght@300;400&display=swap" rel="stylesheet">
+    <link href="https://googleapis.com/css2?family=Cinzel:wght@400;500&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-color: #0b0c10;
-            --card-bg: rgba(255, 255, 255, 0.03);
-            --border-color: rgba(255, 255, 255, 0.08);
-            --text-primary: #f0f0f5;
-            --text-secondary: #a0a5b5;
-            --accent-gold: #d4af37;
-            --glow-color: rgba(212, 175, 55, 0.15);
+            --bg-deep: #050608;
+            --card-glass: rgba(18, 20, 26, 0.65);
+            --border-velvet: rgba(212, 175, 55, 0.12);
+            --text-gold: #dfba6b;
+            --text-pure: #f5f6f9;
+            --text-muted: #8a90a0;
+            --glow-ambient: rgba(223, 186, 107, 0.04);
         }
 
         * {
@@ -26,180 +26,198 @@
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-primary);
-            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-deep);
+            color: var(--text-pure);
+            font-family: 'Playfair Display', serif;
             min-height: 100vh;
             display: flex;
             justify-content: center;
             align-items: center;
             overflow: hidden;
-            padding: 20px;
+            padding: 24px;
             position: relative;
         }
 
-        /* Subtle Luxury Background Animations */
-        body::before {
+        /* Ambient Luxury Lighting Layers */
+        body::before, body::after {
             content: '';
             position: absolute;
-            width: 150vw;
-            height: 150vh;
-            background: radial-gradient(circle, var(--glow-color) 0%, transparent 70%);
-            top: -25%;
-            left: -25%;
-            z-index: 0;
-            animation: drift 20s infinite alternate ease-in-out;
+            width: 80vw;
+            height: 80vh;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--glow-ambient) 0%, transparent 70%);
             pointer-events: none;
+            z-index: 0;
         }
+        body::before { top: -20%; left: -10%; animation: floatGlow 25s infinite alternate ease-in-out; }
+        body::after { bottom: -20%; right: -10%; animation: floatGlow 30s infinite alternate-reverse ease-in-out; }
 
-        @keyframes drift {
+        @keyframes floatGlow {
             0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(5%, 10%) scale(1.1); }
+            100% { transform: translate(8%, -5%) scale(1.15); }
         }
 
-        /* Container Card */
-        .card {
-            background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid var(--border-color);
-            padding: 40px 30px;
-            border-radius: 24px;
+        /* Elite Premium Card */
+        .premium-card {
+            background: var(--card-glass);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border-velvet);
+            padding: 50px 35px;
+            border-radius: 32px;
             width: 100%;
-            max-width: 450px; /* Perfect desktop and mobile standard */
-            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5), 
-                        inset 0 1px 1px rgba(255, 255, 255, 0.1);
+            max-width: 440px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8),
+                        inset 0 1px 0px rgba(255, 255, 255, 0.05);
             z-index: 1;
-            position: relative;
-            transform: translateY(20px);
+            text-align: center;
             opacity: 0;
-            animation: fadeInCard 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            transform: translateY(30px);
+            animation: cardEntrance 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        @keyframes fadeInCard {
+        @keyframes cardEntrance {
             to {
-                transform: translateY(0);
                 opacity: 1;
+                transform: translateY(0);
             }
         }
 
-        /* Decorative Header Design */
-        .header {
-            text-align: center;
-            margin-bottom: 35px;
+        /* Abstract Geometric Luxury Icon (Replacing Gemini Look) */
+        .emblem-wrapper {
+            margin-bottom: 40px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
         }
 
-        .premium-emblem {
-            font-size: 1.5rem;
-            color: var(--accent-gold);
-            margin-bottom: 12px;
+        .luxury-crest {
+            width: 28px;
+            height: 28px;
+            border: 1px solid var(--text-gold);
+            transform: rotate(45deg);
+            position: relative;
             opacity: 0.8;
-            letter-spacing: 3px;
         }
 
-        .line-divider {
-            width: 40px;
-            height: 1px;
-            background: linear-gradient(90deg, transparent, var(--accent-gold), transparent);
-            margin: 0 auto;
+        .luxury-crest::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            border: 1px solid var(--text-gold);
+            opacity: 0.4;
         }
 
-        /* Animated Text Styling */
-        .text-container {
-            font-family: 'Cormorant Garamond', serif;
-            font-size: 1.45rem;
-            line-height: 1.7;
-            color: var(--text-primary);
-            text-align: center;
-            min-height: 180px; /* Prevents layout shifting during typing */
-            letter-spacing: 0.3px;
+        /* Typography Formatting */
+        .message-stream {
+            font-size: 1.5rem;
+            line-height: 1.8;
+            font-weight: 400;
+            min-height: 240px; /* Adapts cleanly to word injection */
+            letter-spacing: -0.2px;
         }
 
-        /* Typing Effects */
-        .word {
+        /* Premium Word-by-Word Sequence Styling */
+        .word-node {
             display: inline-block;
             opacity: 0;
-            transform: translateY(4px);
-            filter: blur(3px);
-            animation: wordAppear 0.5s cubic-bezier(0.25, 1, 0.5, 1) forwards;
-            margin-right: 6px;
+            transform: translateY(8px) scale(0.98);
+            filter: blur(4px);
+            animation: luxuryReveal 0.6s cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+            margin-right: 7px;
         }
 
-        @keyframes wordAppear {
+        @keyframes luxuryReveal {
             to {
                 opacity: 1;
-                transform: translateY(0);
+                transform: translateY(0) scale(1);
                 filter: blur(0);
             }
         }
 
-        /* Decorative Footer */
-        .footer {
-            margin-top: 40px;
-            text-align: center;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
+        /* Footer Signature */
+        .signature-footer {
+            margin-top: 50px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
             text-transform: uppercase;
-            color: var(--text-secondary);
-            opacity: 0.5;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(212, 175, 55, 0.08);
+            padding-top: 25px;
         }
 
-        /* Smooth Mobile Optimization overrides */
+        .signature-footer span {
+            color: var(--text-gold);
+            font-weight: 500;
+            display: block;
+            margin-top: 4px;
+            letter-spacing: 4px;
+        }
+
+        /* Strict Mobile Viewports Optimization */
         @media (max-width: 480px) {
-            .card {
-                padding: 35px 24px;
-                border-radius: 20px;
+            body { padding: 16px; }
+            .premium-card {
+                padding: 40px 24px;
+                border-radius: 24px;
             }
-            .text-container {
-                font-size: 1.3rem;
-                min-height: 220px;
+            .message-stream {
+                font-size: 1.35rem;
+                min-height: 280px;
+            }
+            .signature-footer {
+                margin-top: 40px;
             }
         }
     </style>
 </head>
 <body>
 
-    <div class="card">
-        <div class="header">
-            <div class="premium-emblem">✧</div>
-            <div class="line-divider"></div>
+    <div class="premium-card">
+        <!-- New Custom Minimal Geometric Crest -->
+        <div class="emblem-wrapper">
+            <div class="luxury-crest"></div>
         </div>
 
-        <div class="text-container" id="typing-container">
-            <!-- Dynamic words inject here -->
-        </div>
+        <!-- Word Stream Target Area -->
+        <div class="message-stream" id="text-target"></div>
 
-        <div class="footer">
+        <!-- Tailored Footer Feature -->
+        <div class="signature-footer">
             Shared with Care
+            <span>by Harsh</span>
         </div>
     </div>
 
     <script>
-        const message = "Hey Rahul, this is the best way for me to share my feelings. I cherished the golden time we spent together, and you still appear in my dreams. I am truly impressed by you, and I wish we could always stay connected.";
+        const rawString = "Hey Rahul, this is the best way for me to share my feelings. I cherished the golden time we spent together, and you still appear in my dreams. I am truly impressed by you, and I wish we could always stay connected.";
         
-        // Split text into individual words
-        const words = message.split(" ");
-        const container = document.getElementById("typing-container");
+        const segmentArray = rawString.split(" ");
+        const targetDOM = document.getElementById("text-target");
         
-        // Typing speed controls (in milliseconds)
-        const delayBetweenWords = 180; 
-        const initialDelay = 800; 
+        // Luxury pacing configurations (ms)
+        const sequenceInterval = 200; 
+        const introductoryPause = 1000; 
 
-        function startTyping() {
-            words.forEach((word, index) => {
-                const wordSpan = document.createElement("span");
-                wordSpan.classList.add("word");
-                wordSpan.textContent = word;
+        function initializeTyping() {
+            segmentArray.forEach((wordStr, pos) => {
+                const node = document.createElement("span");
+                node.classList.add("word-node");
+                node.textContent = wordStr;
                 
-                // Staggered execution for luxurious typography presentation
-                wordSpan.style.animationDelay = `${initialDelay + (index * delayBetweenWords)}ms`;
+                // Fine-tuned animation cascade delay matrix
+                node.style.animationDelay = `${introductoryPause + (pos * sequenceInterval)}ms`;
                 
-                container.appendChild(wordSpan);
+                targetDOM.appendChild(node);
             });
         }
 
-        // Trigger animation once DOM content loads
-        window.addEventListener("DOMContentLoaded", startTyping);
+        window.addEventListener("DOMContentLoaded", initializeTyping);
     </script>
 </body>
 </html>
