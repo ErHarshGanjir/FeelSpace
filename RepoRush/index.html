@@ -3,17 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rahul's Repo Rush</title>
+    <title>Repo Pulse // Rahul</title>
     <style>
+        :root {
+            --bg-color: #0a0a0c;
+            --panel-color: #121217;
+            --accent-blue: #00f0ff;
+            --accent-green: #39ff14;
+            --accent-red: #ff3131;
+            --text-main: #e2e8f0;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
+            user-select: none;
         }
+
         body {
-            background: #0d1117;
-            color: #c9d1d9;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            font-family: 'Segoe UI', system-ui, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -21,270 +32,392 @@
             min-height: 100vh;
             overflow: hidden;
         }
-        h1 {
-            margin-bottom: 10px;
-            color: #58a6ff;
-            text-shadow: 0 0 10px rgba(88, 166, 255, 0.3);
-        }
-        p {
-            margin-bottom: 15px;
-            font-size: 14px;
-            color: #8b949e;
-        }
-        #gameContainer {
+
+        .game-wrapper {
             position: relative;
-            border: 3px solid #30363d;
-            border-radius: 6px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            background: var(--panel-color);
+            padding: 20px;
+            border-radius: 16px;
+            border: 1px solid #22222a;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
         }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            width: 600px;
+        }
+
+        .title {
+            font-size: 18px;
+            font-weight: 600;
+            letter-spacing: 2px;
+            color: #888896;
+        }
+
+        .title span {
+            color: var(--accent-blue);
+        }
+
+        .stats-bar {
+            display: flex;
+            gap: 20px;
+            font-family: monospace;
+            font-size: 14px;
+        }
+
+        .stat-box {
+            background: #1a1a24;
+            padding: 6px 12px;
+            border-radius: 6px;
+            border: 1px solid #2a2a38;
+        }
+
+        #scoreVal { color: var(--accent-green); font-weight: bold; }
+        #levelVal { color: var(--accent-blue); font-weight: bold; }
+
+        #canvasContainer {
+            position: relative;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #020204;
+        }
+
         canvas {
-            background: #161b22;
             display: block;
         }
-        #overlay {
+
+        /* Modern overlay UI */
+        .overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(13, 17, 23, 0.85);
+            background: rgba(5, 5, 8, 0.9);
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            border-radius: 3px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(4px);
         }
-        .btn {
-            background-color: #238636;
-            color: white;
-            border: 1px solid rgba(240,246,252,0.1);
-            padding: 12px 24px;
-            font-size: 18px;
-            font-weight: bold;
-            border-radius: 6px;
-            cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 15px;
-        }
-        .btn:hover {
-            background-color: #2ea44f;
-        }
-        .win-message {
-            color: #ff7b72;
+
+        .overlay h2 {
             font-size: 28px;
-            font-weight: bold;
-            text-align: center;
-            animation: pulse 1.5s infinite;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
         }
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+
+        .overlay p {
+            color: #6c6c7d;
+            font-size: 14px;
+            margin-bottom: 25px;
+            text-align: center;
+            line-height: 1.5;
+        }
+
+        .btn {
+            background: transparent;
+            color: var(--text-main);
+            border: 2px solid var(--accent-blue);
+            padding: 12px 30px;
+            font-size: 15px;
+            font-weight: 600;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            background: var(--accent-blue);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.4);
+        }
+
+        /* Win State Heart Animation */
+        .heart-container {
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .win-title {
+            font-size: 32px;
+            font-weight: 800;
+            background: linear-gradient(45deg, #ff3131, #ff7b72);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .heart {
+            font-size: 60px;
+            color: var(--accent-red);
+            animation: beat 0.8s infinite alternate;
+            margin: 15px 0;
+        }
+
+        @keyframes beat {
+            to { transform: scale(1.2); }
         }
     </style>
 </head>
 <body>
 
-    <h1>Rahul's Repo Rush 🚀</h1>
-    <p>Use <b>Left / Right Arrow keys</b> or <b>A / D</b> to move. Collect Repos, avoid Bugs!</p>
+    <div class="header">
+        <div class="title">REPO//<span>PULSE</span></div>
+        <div class="stats-bar">
+            <div class="stat-box">PLAYER: <span style="color: #fff;">RAHUL</span></div>
+            <div class="stat-box">SCORE: <span id="scoreVal">0/50</span></div>
+            <div class="stat-box">LVL: <span id="levelVal">1</span></div>
+        </div>
+    </div>
 
-    <div id="gameContainer">
-        <canvas id="gameCanvas" width="600" height="450"></canvas>
-        <div id="overlay">
-            <h2 id="overlayTitle" style="font-size: 24px; margin-bottom: 10px;">Ready, Rahul?</h2>
-            <p id="overlaySub" style="color: #8b949e; text-align: center; padding: 0 20px;">Reach 50 Points to win!</p>
-            <button class="btn" id="startBtn" onclick="startGame()">Start Game</button>
+    <div class="game-wrapper">
+        <div id="canvasContainer">
+            <canvas id="gameCanvas" width="600" height="400"></canvas>
+            
+            <div id="uiOverlay" class="overlay">
+                <div id="menuContent">
+                    <h2>Ready, Rahul?</h2>
+                    <p>Move mouse or drag screen left/right to move.<br>Absorb green source blocks. Avoid red corruption.</p>
+                    <button class="btn" onclick="initGame()">INITIALIZE</button>
+                </div>
+                
+                <div id="winContent" class="heart-container">
+                    <div class="win-title">YOU WON HARSH'S HEART</div>
+                    <div class="heart">❤️</div>
+                    <p style="margin-bottom: 15px;">Perfect execution. Repository secured successfully.</p>
+                    <button class="btn" onclick="initGame()">PLAY AGAIN</button>
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
-        const overlay = document.getElementById('overlay');
-        const overlayTitle = document.getElementById('overlayTitle');
-        const overlaySub = document.getElementById('overlaySub');
-        const startBtn = document.getElementById('startBtn');
+        const uiOverlay = document.getElementById('uiOverlay');
+        const menuContent = document.getElementById('menuContent');
+        const winContent = document.getElementById('winContent');
+        
+        const scoreVal = document.getElementById('scoreVal');
+        const levelVal = document.getElementById('levelVal');
 
-        // Game Configuration
-        let isPlaying = false;
+        let gameActive = false;
         let score = 0;
         let level = 1;
-        let timeElapsed = 0;
-        let targetScore = 50;
+        let speedMultiplier = 1;
+        
+        let playerX = 300;
+        const playerY = 340;
+        const playerSize = 16;
+        let targetX = 300; // Smooth movement interpolation
 
-        // Player (Rahul) object
-        const player = {
-            x: canvas.width / 2 - 25,
-            y: canvas.height - 50,
-            width: 50,
-            height: 40,
-            speed: 8,
-            color: '#58a6ff'
-        };
+        let entities = [];
+        let particles = [];
+        let spawnTimer = 0;
 
-        // Items arrays
-        let items = [];
-        let lastSpawnTime = 0;
-        let baseSpawnInterval = 1000; // ms
-
-        // Keyboard Input State
-        const keys = {
-            left: false,
-            right: false
-        };
-
-        // Event Listeners
-        window.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') keys.left = true;
-            if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') keys.right = true;
+        // Mouse & Touch Interaction
+        window.addEventListener('mousemove', (e) => {
+            const rect = canvas.getBoundingClientRect();
+            targetX = e.clientX - rect.left;
         });
 
-        window.addEventListener('keyup', (e) => {
-            if (e.key === 'ArrowLeft' || e.key.toLowerCase() === 'a') keys.left = false;
-            if (e.key === 'ArrowRight' || e.key.toLowerCase() === 'd') keys.right = false;
-        });
+        canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const rect = canvas.getBoundingClientRect();
+            if(e.touches[0]) {
+                targetX = e.touches[0].clientX - rect.left;
+            }
+        }, { passive: false });
 
-        function startGame() {
-            // Reset states
+        function initGame() {
             score = 0;
             level = 1;
-            timeElapsed = 0;
-            items = [];
-            player.x = canvas.width / 2 - player.width / 2;
-            isPlaying = true;
-            lastSpawnTime = performance.now();
+            speedMultiplier = 1;
+            entities = [];
+            particles = [];
+            spawnTimer = 0;
+            playerX = 300;
+            targetX = 300;
             
-            overlay.style.display = 'none';
+            scoreVal.innerText = "0/50";
+            levelVal.innerText = "1";
             
-            requestAnimationFrame(gameLoop);
+            uiOverlay.style.opacity = '0';
+            setTimeout(() => uiOverlay.style.display = 'none', 300);
+            
+            gameActive = true;
+            requestAnimationFrame(update);
         }
 
-        function createItem() {
-            // Randomly choose between a valid Repo (Good) or a Bug (Bad)
-            const isRepo = Math.random() > 0.4; 
-            const size = isRepo ? 24 : 18;
-            
-            items.push({
-                x: Math.random() * (canvas.width - size),
-                y: -size,
-                size: size,
-                type: isRepo ? 'repo' : 'bug',
-                // Speed increases based on the current level
-                speed: (Math.random() * 2 + 2) + (level * 0.8), 
-                color: isRepo ? '#3fb950' : '#f85149'
-            });
+        function triggerWin() {
+            gameActive = false;
+            uiOverlay.style.display = 'flex';
+            setTimeout(() => uiOverlay.style.opacity = '1', 10);
+            menuContent.style.display = 'none';
+            winContent.style.display = 'flex';
         }
 
-        function gameOver(status) {
-            isPlaying = false;
-            overlay.style.display = 'flex';
-            
-            if (status === 'win') {
-                overlayTitle.innerHTML = "<div class='win-message'>You won Harsh's heart! ❤️</div>";
-                overlaySub.innerText = `Outstanding job, Rahul! You mastered Level ${level}!`;
-                startBtn.innerText = "Play Again";
-            } else {
-                overlayTitle.innerHTML = "<span style='color: #ff7b72;'>Game Over! 🐛</span>";
-                overlaySub.innerText = `Rahul caught too many bugs. Final Score: ${score} (Level ${level})`;
-                startBtn.innerText = "Try Again";
+        function triggerGameOver() {
+            gameActive = false;
+            uiOverlay.style.display = 'flex';
+            setTimeout(() => uiOverlay.style.opacity = '1', 10);
+            menuContent.style.display = 'block';
+            winContent.style.display = 'none';
+            document.querySelector('#menuContent h2').innerText = "System Corrupted";
+            document.querySelector('#menuContent p').innerHTML = `Rahul hit a bug. Final Score: ${score}<br>Try again to win Harsh's heart!`;
+            document.querySelector('#menuContent .btn').innerText = "REBOOT SYSTEM";
+        }
+
+        function spawnParticle(x, y, color) {
+            for(let i=0; i<12; i++) {
+                particles.push({
+                    x: x, y: y,
+                    vx: (Math.random() - 0.5) * 8,
+                    vy: (Math.random() - 0.5) * 8,
+                    radius: Math.random() * 3 + 1,
+                    alpha: 1,
+                    color: color
+                });
             }
         }
 
-        // Main Loop
-        let lastTime = 0;
-        function gameLoop(timestamp) {
-            if (!isPlaying) return;
+        function update(timestamp) {
+            if (!gameActive) return;
 
-            // Clear Screen
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            // Clear frame
+            ctx.fillStyle = '#050508';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
 
-            // Handle Difficulty & Level increases over time
-            timeElapsed += 1;
-            if (timeElapsed % 400 === 0) {
+            // Draw Minimalist Tech Grid Lines
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
+            ctx.lineWidth = 1;
+            for(let i = 0; i < canvas.width; i += 40) {
+                ctx.beginPath(); ctx.moveTo(i, 0); ctx.lineTo(i, canvas.height); ctx.stroke();
+            }
+
+            // Smoothly ease player position toward target/mouse position
+            playerX += (targetX - playerX) * 0.25;
+            // Bound checks
+            if (playerX < playerSize) playerX = playerSize;
+            if (playerX > canvas.width - playerSize) playerX = canvas.width - playerSize;
+
+            // Draw Level/Speed Escalation logic
+            spawnTimer++;
+            if (spawnTimer % 300 === 0) {
                 level++;
+                speedMultiplier += 0.25;
+                levelVal.innerText = level;
             }
 
-            // Move Player
-            if (keys.left && player.x > 0) player.x -= player.speed;
-            if (keys.right && player.x < canvas.width - player.width) player.x += player.speed;
-
-            // Draw Rahul (Player avatar designed like a terminal/code block)
-            ctx.fillStyle = player.color;
-            ctx.fillRect(player.x, player.y, player.width, player.height);
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 12px monospace';
-            ctx.fillText("Rahul", player.x + 6, player.y + 24);
-
-            // Spawning items dynamically
-            let currentInterval = Math.max(400, baseSpawnInterval - (level * 80));
-            if (timestamp - lastSpawnTime > currentInterval) {
-                createItem();
-                lastSpawnTime = timestamp;
+            // Generate Dropping Codes/Entities
+            if (Math.random() < 0.03 + (level * 0.005)) {
+                const isGood = Math.random() > 0.45;
+                entities.push({
+                    x: Math.random() * (canvas.width - 20) + 10,
+                    y: -10,
+                    speed: (Math.random() * 2 + 3) * speedMultiplier,
+                    type: isGood ? 'repo' : 'bug',
+                    size: isGood ? 8 : 6,
+                    color: isGood ? '#39ff14' : '#ff3131'
+                });
             }
 
-            // Update & Draw Items
-            for (let i = items.length - 1; i >= 0; i--) {
-                let item = items[i];
-                item.y += item.speed;
+            // Draw & Calculate Entity Logic
+            for (let i = entities.length - 1; i >= 0; i--) {
+                let e = entities[i];
+                e.y += e.speed;
 
-                // Draw item shapes
-                ctx.fillStyle = item.color;
-                if (item.type === 'repo') {
-                    // Draw Repo box
-                    ctx.fillRect(item.x, item.y, item.size, item.size);
-                    ctx.fillStyle = '#fff';
-                    ctx.font = '10px sans-serif';
-                    ctx.fillText("📦", item.x + 3, item.y + 14);
+                // Draw diamond shape for repositories, clean square for bugs
+                ctx.fillStyle = e.color;
+                ctx.shadowBlur = 10;
+                ctx.shadowColor = e.color;
+                
+                ctx.beginPath();
+                if (e.type === 'repo') {
+                    ctx.moveTo(e.x, e.y - e.size);
+                    ctx.lineTo(e.x + e.size, e.y);
+                    ctx.lineTo(e.x, e.y + e.size);
+                    ctx.lineTo(e.x - e.size, e.y);
                 } else {
-                    // Draw Bug circle
-                    ctx.beginPath();
-                    ctx.arc(item.x + item.size/2, item.y + item.size/2, item.size/2, 0, Math.PI * 2);
-                    ctx.fill();
-                    ctx.fillStyle = '#fff';
-                    ctx.font = '10px sans-serif';
-                    ctx.fillText("🪲", item.x + 2, item.y + 13);
+                    ctx.arc(e.x, e.y, e.size, 0, Math.PI * 2);
                 }
+                ctx.fill();
+                ctx.shadowBlur = 0; // Reset shadow glow
 
-                // Check Collisions with Rahul
-                if (item.x < player.x + player.width &&
-                    item.x + item.size > player.x &&
-                    item.y < player.y + player.height &&
-                    item.y + item.size > player.y) {
-                    
-                    if (item.type === 'repo') {
+                // Collision Check
+                let dist = Math.hypot(e.x - playerX, e.y - playerY);
+                if (dist < playerSize + e.size) {
+                    if (e.type === 'repo') {
                         score += 2;
-                        // Win Condition Checking
-                        if (score >= targetScore) {
-                            gameOver('win');
+                        scoreVal.innerText = `${score}/50`;
+                        spawnParticle(e.x, e.y, '#39ff14');
+                        entities.splice(i, 1);
+
+                        if (score >= 50) {
+                            triggerWin();
                             return;
                         }
                     } else {
-                        gameOver('lose');
+                        spawnParticle(e.x, e.y, '#ff3131');
+                        triggerGameOver();
                         return;
                     }
-                    items.splice(i, 1);
                     continue;
                 }
 
-                // Remove out of bounds items
-                if (item.y > canvas.height) {
-                    items.splice(i, 1);
+                // Cleanup missed items
+                if (e.y > canvas.height + 20) {
+                    entities.splice(i, 1);
                 }
             }
 
-            // Draw Top UI Panel
-            ctx.fillStyle = '#21262d';
-            ctx.fillRect(0, 0, canvas.width, 40);
-            
-            ctx.fillStyle = '#c9d1d9';
-            ctx.font = '14px monospace';
-            ctx.fillText(`Player: Rahul`, 15, 25);
-            ctx.fillText(`Score: ${score}/${targetScore}`, 200, 25);
-            
-            ctx.fillStyle = '#f0883e';
-            ctx.fillText(`Level: ${level} (Harder!)`, canvas.width - 150, 25);
+            // Process and Draw Explosion Particles
+            for(let i = particles.length - 1; i >= 0; i--) {
+                let p = particles[i];
+                p.x += p.vx;
+                p.y += p.vy;
+                p.alpha -= 0.03;
+                if(p.alpha <= 0) {
+                    particles.splice(i, 1);
+                    continue;
+                }
+                ctx.fillStyle = p.color;
+                ctx.globalAlpha = p.alpha;
+                ctx.beginPath();
+                ctx.arc(p.x, p.y, p.radius, 0, Math.PI*2);
+                ctx.fill();
+                ctx.globalAlpha = 1.0;
+            }
 
-            requestAnimationFrame(gameLoop);
+            // Draw Rahul (The Character Avatar)
+            ctx.fillStyle = '#00f0ff';
+            ctx.shadowBlur = 15;
+            ctx.shadowColor = '#00f0ff';
+            
+            // Modern clean triangle pointer design
+            ctx.beginPath();
+            ctx.moveTo(playerX, playerY - playerSize);
+            ctx.lineTo(playerX + playerSize, playerY + playerSize);
+            ctx.lineTo(playerX - playerSize, playerY + playerSize);
+            ctx.closePath();
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Character ID Label
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+            ctx.font = '9px monospace';
+            ctx.textAlign = 'center';
+            ctx.fillText("RAHUL.EXE", playerX, playerY + playerSize + 15);
+
+            requestAnimationFrame(update);
         }
     </script>
 </body>
