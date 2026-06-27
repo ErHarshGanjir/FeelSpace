@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For Rahul</title>
+    <title>For My Brother, Rahul</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -12,101 +14,202 @@
         }
 
         body {
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            font-family: 'Space Grotesk', sans-serif;
+            background-color: #050505;
             color: #ffffff;
+            overflow: hidden; /* Prevents scrollbars from the canvas */
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
         }
 
-        .letter-container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 16px;
-            padding: 40px;
-            max-width: 600px;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
-            
-            /* Animation properties */
+        /* Interactive Background */
+        #particle-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* The glowing message card */
+        .glass-card {
+            position: relative;
+            z-index: 2;
+            background: rgba(10, 10, 15, 0.6);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 650px;
+            width: 90%;
+            box-shadow: 0 0 40px rgba(0, 153, 255, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.05);
+            animation: cardEntrance 2s ease-out forwards;
             opacity: 0;
-            transform: translateY(30px);
-            animation: fadeUp 1.2s ease-out forwards;
+            transform: scale(0.9);
         }
 
-        @keyframes fadeUp {
-            to {
+        @keyframes cardEntrance {
+            100% {
                 opacity: 1;
-                transform: translateY(0);
+                transform: scale(1);
             }
         }
 
         h1 {
-            font-size: 2rem;
-            margin-bottom: 24px;
-            font-weight: 600;
-            letter-spacing: 1px;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            font-weight: 700;
+            background: linear-gradient(to right, #00f2fe, #4facfe);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
+            opacity: 0;
+            animation: fadeIn 1s 1s ease-out forwards;
         }
 
-        p {
-            font-size: 1.15rem;
-            line-height: 1.7;
-            margin-bottom: 20px;
-            color: #f0f0f0;
+        .message-container {
+            font-size: 1.25rem;
+            line-height: 1.8;
+            color: #e0e0e0;
+            min-height: 150px; /* Keeps the card size stable while typing */
+        }
+
+        /* Cursor for the typewriter effect */
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            height: 1.2rem;
+            background-color: #00f2fe;
+            animation: blink 0.8s infinite;
+            vertical-align: middle;
+            margin-left: 2px;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
         }
 
         .signature-block {
             margin-top: 40px;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-            padding-top: 20px;
+            opacity: 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 25px;
         }
 
         .sign-off {
-            font-size: 1.15rem;
-            margin-bottom: 5px;
+            font-size: 1.1rem;
+            color: #a0a0a0;
+            margin-bottom: 8px;
         }
 
         .name {
-            font-size: 1.4rem;
-            font-weight: bold;
-            font-style: italic;
-            background: -webkit-linear-gradient(#fff, #e0e0e0);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 1.8rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #ffffff;
+            text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
-        /* Mobile responsiveness */
-        @media (max-width: 480px) {
-            .letter-container {
-                padding: 30px 20px;
+        @keyframes fadeIn {
+            100% { opacity: 1; }
+        }
+
+        @media (max-width: 600px) {
+            .glass-card {
+                padding: 30px;
             }
-            h1 {
-                font-size: 1.75rem;
-            }
-            p {
-                font-size: 1.05rem;
-            }
+            h1 { font-size: 2rem; }
+            .message-container { font-size: 1.1rem; }
         }
     </style>
 </head>
 <body>
 
-    <div class="letter-container">
+    <canvas id="particle-canvas"></canvas>
+
+    <div class="glass-card">
         <h1>Hey Rahul,</h1>
         
-        <p>I miss you, bro. Things are different when you're not around, and I really need my brother by my side.</p>
+        <div class="message-container">
+            <span id="typed-text"></span><span class="cursor"></span>
+        </div>
         
-        <p>You are the kind of friend I can always count on, and I'm lucky to have you in my life. Let's meet up soon.</p>
-        
-        <div class="signature-block">
-            <p class="sign-off">Love you, man,</p>
-            <p class="name">Harsh Ganjir</p>
+        <div class="signature-block" id="signature">
+            <div class="sign-off">Love you, man,</div>
+            <div class="name">Harsh Ganjir</div>
         </div>
     </div>
 
-</body>
-</html>
+    <script>
+        // --- TYPEWRITER EFFECT LOGIC ---
+        const message = "I miss you, bro. Things are different when you're not around, and I really need my brother by my side.\n\nYou are the kind of friend I can always count on, and I'm lucky to have you in my life. Let's meet up soon.";
+        
+        const textElement = document.getElementById('typed-text');
+        const signatureBlock = document.getElementById('signature');
+        let index = 0;
+
+        function typeWriter() {
+            if (index < message.length) {
+                if (message.charAt(index) === '\n') {
+                    textElement.innerHTML += "<br>";
+                } else {
+                    textElement.innerHTML += message.charAt(index);
+                }
+                index++;
+                // Randomize typing speed slightly for a human feel
+                let typingSpeed = Math.floor(Math.random() * (60 - 30 + 1)) + 30; 
+                setTimeout(typeWriter, typingSpeed);
+            } else {
+                // When typing is done, fade in the signature
+                setTimeout(() => {
+                    signatureBlock.style.animation = "fadeIn 1.5s ease-out forwards";
+                }, 500);
+            }
+        }
+
+        // Start typing after the initial card entrance animation
+        setTimeout(typeWriter, 1500);
+
+
+        // --- INTERACTIVE PARTICLE BACKGROUND LOGIC ---
+        const canvas = document.getElementById('particle-canvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        let particlesArray;
+        let mouse = {
+            x: null,
+            y: null,
+            radius: (canvas.height / 80) * (canvas.width / 80)
+        }
+
+        window.addEventListener('mousemove', function(event) {
+            mouse.x = event.x;
+            mouse.y = event.y;
+        });
+
+        class Particle {
+            constructor(x, y, directionX, directionY, size, color) {
+                this.x = x;
+                this.y = y;
+                this.directionX = directionX;
+                this.directionY = directionY;
+                this.size = size;
+                this.color = color;
+            }
+            draw() {
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
+                ctx.fillStyle = '#4facfe';
+                ctx.fill();
+            }
+            update() {
+                if (this.x > canvas.width || this.x < 0) {
+                    this.directionXNormally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.
