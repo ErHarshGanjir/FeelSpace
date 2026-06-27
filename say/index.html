@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Brother, Rahul</title>
+    <title>For Rahul</title>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');
 
@@ -17,7 +17,7 @@
             font-family: 'Space Grotesk', sans-serif;
             background-color: #050505;
             color: #ffffff;
-            overflow: hidden; /* Prevents scrollbars from the canvas */
+            overflow: hidden; 
             display: flex;
             justify-content: center;
             align-items: center;
@@ -75,7 +75,7 @@
             font-size: 1.25rem;
             line-height: 1.8;
             color: #e0e0e0;
-            min-height: 150px; /* Keeps the card size stable while typing */
+            min-height: 150px; 
         }
 
         /* Cursor for the typewriter effect */
@@ -162,11 +162,9 @@
                     textElement.innerHTML += message.charAt(index);
                 }
                 index++;
-                // Randomize typing speed slightly for a human feel
                 let typingSpeed = Math.floor(Math.random() * (60 - 30 + 1)) + 30; 
                 setTimeout(typeWriter, typingSpeed);
             } else {
-                // When typing is done, fade in the signature
                 setTimeout(() => {
                     signatureBlock.style.animation = "fadeIn 1.5s ease-out forwards";
                 }, 500);
@@ -176,24 +174,13 @@
         // Start typing after the initial card entrance animation
         setTimeout(typeWriter, 1500);
 
-
         // --- INTERACTIVE PARTICLE BACKGROUND LOGIC ---
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
 
-        let particlesArray;
-        let mouse = {
-            x: null,
-            y: null,
-            radius: (canvas.height / 80) * (canvas.width / 80)
-        }
-
-        window.addEventListener('mousemove', function(event) {
-            mouse.x = event.x;
-            mouse.y = event.y;
-        });
+        let particlesArray = [];
 
         class Particle {
             constructor(x, y, directionX, directionY, size, color) {
@@ -207,9 +194,52 @@
             draw() {
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-                ctx.fillStyle = '#4facfe';
+                ctx.fillStyle = this.color;
                 ctx.fill();
             }
             update() {
                 if (this.x > canvas.width || this.x < 0) {
-                    this.directionXNormally I can help with things like this, but I don't seem to have access to that content. You can try again or ask me for something else.
+                    this.directionX = -this.directionX;
+                }
+                if (this.y > canvas.height || this.y < 0) {
+                    this.directionY = -this.directionY;
+                }
+                this.x += this.directionX;
+                this.y += this.directionY;
+                this.draw();
+            }
+        }
+
+        function init() {
+            particlesArray = [];
+            let numberOfParticles = (canvas.height * canvas.width) / 9000;
+            for (let i = 0; i < numberOfParticles; i++) {
+                let size = (Math.random() * 2) + 1;
+                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
+                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
+                let directionX = (Math.random() * 1.5) - 0.75;
+                let directionY = (Math.random() * 1.5) - 0.75;
+                let color = 'rgba(79, 172, 254, 0.4)';
+                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            }
+        }
+
+        function animate() {
+            requestAnimationFrame(animate);
+            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            for (let i = 0; i < particlesArray.length; i++) {
+                particlesArray[i].update();
+            }
+        }
+
+        window.addEventListener('resize', function() {
+            canvas.width = innerWidth;
+            canvas.height = innerHeight;
+            init();
+        });
+
+        init();
+        animate();
+    </script>
+</body>
+</html>
