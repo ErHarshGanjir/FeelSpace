@@ -1,154 +1,170 @@
-const text=`Hey Rahul,
+```javascript
+// ----------------------------
+// Elements
+// ----------------------------
 
-I miss you, bro.
+const welcome = document.getElementById("welcome");
+const envelopePage = document.getElementById("envelopePage");
+const letterPage = document.getElementById("letterPage");
 
-Things are different when you're not around, and I really need my brother by my side.
+const openBtn = document.getElementById("openLetter");
+const envelope = document.querySelector(".envelope");
+const flap = document.querySelector(".envelope-top");
+const preview = document.querySelector(".letter-preview");
 
-You are the kind of friend I can always count on, and I'm lucky to have you in my life.
+const restart = document.getElementById("restart");
 
-Let's meet up soon.
+const paragraphs = document.querySelectorAll(".hidden");
 
-❤️ Love you, man.`;
+// ----------------------------
+// Change Screen
+// ----------------------------
 
-const message=document.getElementById("message");
+function showPage(page){
 
-let i=0;
+    document
+        .querySelectorAll(".page")
+        .forEach(p=>p.classList.remove("active"));
 
-function type(){
-
-if(i<text.length){
-
-message.innerHTML+=text.charAt(i);
-
-i++;
-
-setTimeout(type,35);
-
-}
-
-}
-
-const canvas=document.getElementById("scratch");
-
-const ctx=canvas.getContext("2d");
-
-function resize(){
-
-canvas.width=canvas.offsetWidth;
-
-canvas.height=canvas.offsetHeight;
-
-ctx.fillStyle="#777";
-
-ctx.fillRect(0,0,canvas.width,canvas.height);
-
-ctx.fillStyle="white";
-
-ctx.font="bold 28px Arial";
-
-ctx.textAlign="center";
-
-ctx.fillText("Scratch Here ✨",canvas.width/2,canvas.height/2);
+    page.classList.add("active");
 
 }
 
-resize();
+// ----------------------------
+// Welcome → Envelope
+// ----------------------------
 
-window.onresize=resize;
+openBtn.onclick=()=>{
 
-ctx.globalCompositeOperation="destination-out";
+    showPage(envelopePage);
 
-let scratching=false;
-let started=false;
+};
 
-canvas.addEventListener("mousedown",()=>{
+// ----------------------------
+// Envelope → Letter
+// ----------------------------
 
-scratching=true;
+envelope.onclick=()=>{
 
-if(!started){
+    flap.style.transform="rotateX(180deg)";
 
-started=true;
+    preview.style.transform=
+    "translate(-50%,-120px)";
 
-document.querySelector(".hint").style.display="none";
+    preview.style.opacity="0";
 
-type();
+    setTimeout(()=>{
+
+        showPage(letterPage);
+
+        revealMessage();
+
+    },900);
+
+};
+
+// ----------------------------
+// Reveal Letter
+// ----------------------------
+
+function revealMessage(){
+
+    paragraphs.forEach(p=>{
+
+        p.classList.remove("show");
+
+    });
+
+    paragraphs.forEach((p,index)=>{
+
+        setTimeout(()=>{
+
+            p.classList.add("show");
+
+        },index*1800);
+
+    });
 
 }
+
+// ----------------------------
+// Restart
+// ----------------------------
+
+restart.onclick=()=>{
+
+    flap.style.transform="";
+
+    preview.style.transform="translateX(-50%)";
+
+    preview.style.opacity="1";
+
+    paragraphs.forEach(p=>{
+
+        p.classList.remove("show");
+
+    });
+
+    showPage(welcome);
+
+};
+
+// ----------------------------
+// Floating Hearts
+// ----------------------------
+
+const hearts=document.getElementById("hearts");
+
+function createHeart(){
+
+    const heart=document.createElement("div");
+
+    heart.className="heart";
+
+    heart.innerHTML=Math.random()>0.5?"❤":"💖";
+
+    heart.style.left=Math.random()*100+"vw";
+
+    heart.style.fontSize=
+    (16+Math.random()*18)+"px";
+
+    heart.style.animationDuration=
+    (6+Math.random()*5)+"s";
+
+    hearts.appendChild(heart);
+
+    setTimeout(()=>{
+
+        heart.remove();
+
+    },10000);
+
+}
+
+setInterval(createHeart,900);
+
+// ----------------------------
+// Mouse Glow
+// ----------------------------
+
+const glow=document.createElement("div");
+
+glow.style.position="fixed";
+glow.style.width="300px";
+glow.style.height="300px";
+glow.style.borderRadius="50%";
+glow.style.pointerEvents="none";
+glow.style.background=
+"radial-gradient(circle, rgba(255,255,255,.08), transparent 70%)";
+glow.style.transform="translate(-50%,-50%)";
+glow.style.zIndex="-1";
+
+document.body.appendChild(glow);
+
+document.addEventListener("mousemove",(e)=>{
+
+    glow.style.left=e.clientX+"px";
+    glow.style.top=e.clientY+"px";
 
 });
-
-window.addEventListener("mouseup",()=>{
-
-scratching=false;
-
-});
-
-canvas.addEventListener("mousemove",(e)=>{
-
-if(!scratching)return;
-
-const rect=canvas.getBoundingClientRect();
-
-const x=e.clientX-rect.left;
-
-const y=e.clientY-rect.top;
-
-ctx.beginPath();
-
-ctx.arc(x,y,22,0,Math.PI*2);
-
-ctx.fill();
-
-});
-
-canvas.addEventListener("touchstart",()=>{
-
-if(!started){
-
-started=true;
-
-document.querySelector(".hint").style.display="none";
-
-type();
-
-}
-
-});
-
-canvas.addEventListener("touchmove",(e)=>{
-
-e.preventDefault();
-
-const rect=canvas.getBoundingClientRect();
-
-const x=e.touches[0].clientX-rect.left;
-
-const y=e.touches[0].clientY-rect.top;
-
-ctx.beginPath();
-
-ctx.arc(x,y,22,0,Math.PI*2);
-
-ctx.fill();
-
-},{passive:false});
-
-function heart(){
-
-const h=document.createElement("div");
-
-h.className="heart";
-
-h.innerHTML=Math.random()>.5?"❤️":"💖";
-
-h.style.left=Math.random()*100+"vw";
-
-h.style.fontSize=(18+Math.random()*18)+"px";
-
-document.body.appendChild(h);
-
-setTimeout(()=>h.remove(),7000);
-
-}
-
-setInterval(heart,700);
+```
