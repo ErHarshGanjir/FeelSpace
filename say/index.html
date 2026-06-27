@@ -1,37 +1,125 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>For Rahul ❤️</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Rahul ❤️</title>
 
-<link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="stars"></div>
-
-<div class="container">
-
-    <h1>For Rahul ❤️</h1>
-
-    <div class="card">
-
-        <div id="message"></div>
-
-        <canvas id="scratch"></canvas>
-
-        <div class="hint">
-            Scratch Here ✨
-        </div>
-
+    <!-- Animated Background -->
+    <div class="background">
+        <div class="stars"></div>
+        <div class="gradient"></div>
     </div>
 
-</div>
+    <!-- Floating Hearts -->
+    <div id="hearts"></div>
 
-<div id="hearts"></div>
+    <!-- Welcome Screen -->
+    <section id="welcome" class="screen active">
 
-<script src="script.js"></script>
+        <div class="welcome-box">
+
+            <span class="small-text">A little message...</span>
+
+            <h1>For Rahul ❤️</h1>
+
+            <p>
+                Someone wanted you to read this.
+            </p>
+
+            <button id="startBtn">
+                Open Letter →
+            </button>
+
+        </div>
+
+    </section>
+
+    <!-- Envelope Screen -->
+    <section id="envelopeScreen" class="screen">
+
+        <div class="envelope-wrapper">
+
+            <div id="envelope" class="envelope">
+
+                <div class="flap"></div>
+
+                <div class="paper-preview">
+
+                    <span>To Rahul</span>
+
+                </div>
+
+            </div>
+
+            <p class="click-text">
+                Click the envelope
+            </p>
+
+        </div>
+
+    </section>
+
+    <!-- Letter Screen -->
+    <section id="letterScreen" class="screen">
+
+        <div class="letter">
+
+            <div class="letter-top">
+
+                <h2>To Rahul,</h2>
+
+                <span class="date">
+                    With love ❤️
+                </span>
+
+            </div>
+
+            <div id="message">
+
+                <p class="line">
+                    Hey Rahul,
+                </p>
+
+                <p class="line">
+                    I miss you, bro.
+                </p>
+
+                <p class="line">
+                    Things are different when you're not around,
+                    and I really need my brother by my side.
+                </p>
+
+                <p class="line">
+                    You are the kind of friend I can always count on,
+                    and I'm lucky to have you in my life.
+                </p>
+
+                <p class="line">
+                    Let's meet up soon.
+                </p>
+
+                <p class="line ending">
+                    Love you, man. ❤️
+                </p>
+
+            </div>
+
+            <button id="restartBtn">
+                Read Again ↺
+            </button>
+
+        </div>
+
+    </section>
+
+    <script src="script.js"></script>
 
 </body>
 </html>
+```
