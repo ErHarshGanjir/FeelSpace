@@ -21,6 +21,7 @@
             align-items: center;
         }
 
+        /* Interactive Background */
         #particle-canvas {
             position: absolute;
             top: 0;
@@ -30,6 +31,7 @@
             z-index: 1;
         }
 
+        /* The glowing message card */
         .glass-card {
             position: relative;
             z-index: 2;
@@ -38,70 +40,96 @@
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            padding: 40px;
-            max-width: 90%;
-            width: 600px;
-            box-shadow: 0 0 40px rgba(0, 153, 255, 0.2);
-            animation: cardEntrance 1.5s ease-out forwards;
+            padding: 50px;
+            max-width: 650px;
+            width: 90%;
+            box-shadow: 0 0 40px rgba(0, 153, 255, 0.15), inset 0 0 20px rgba(255, 255, 255, 0.05);
+            animation: cardEntrance 1.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
             opacity: 0;
-            transform: translateY(30px);
+            transform: scale(0.95) translateY(20px);
         }
 
         @keyframes cardEntrance {
             to {
                 opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        /* MODERN TEXT ANIMATION: Blur Reveal */
+        @keyframes blurReveal {
+            0% {
+                opacity: 0;
+                filter: blur(12px);
+                transform: translateY(15px);
+            }
+            100% {
+                opacity: 1;
+                filter: blur(0);
                 transform: translateY(0);
             }
         }
 
         h1 {
-            font-size: 2.2rem;
-            margin-bottom: 20px;
+            font-size: 2.5rem;
+            margin-bottom: 30px;
+            font-weight: 700;
             background: linear-gradient(to right, #00f2fe, #4facfe);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            text-shadow: 0 0 20px rgba(79, 172, 254, 0.2);
+            
+            /* Apply animation */
             opacity: 0;
-            animation: fadeIn 1s 0.5s forwards;
+            animation: blurReveal 1.2s forwards;
+            animation-delay: 0.8s; /* Starts right after card enters */
         }
 
-        .message-container {
-            font-size: 1.2rem;
-            line-height: 1.7;
+        .message-paragraph {
+            font-size: 1.25rem;
+            line-height: 1.8;
             color: #e0e0e0;
-            min-height: 120px;
+            margin-bottom: 20px;
+            
+            /* Apply animation */
+            opacity: 0;
+            animation: blurReveal 1.2s forwards;
         }
 
-        .cursor {
-            display: inline-block;
-            width: 3px;
-            height: 1.2rem;
-            background-color: #00f2fe;
-            animation: blink 0.8s infinite;
-            vertical-align: middle;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0; }
-        }
+        /* Stagger the delays for each paragraph */
+        .delay-1 { animation-delay: 1.5s; }
+        .delay-2 { animation-delay: 2.2s; }
 
         .signature-block {
-            margin-top: 30px;
-            opacity: 0;
+            margin-top: 40px;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 20px;
+            padding-top: 25px;
+            
+            /* Apply animation */
+            opacity: 0;
+            animation: blurReveal 1.2s forwards;
+            animation-delay: 3.2s; /* Appears last */
+        }
+
+        .sign-off {
+            font-size: 1.1rem;
+            color: #a0a0a0;
+            margin-bottom: 8px;
         }
 
         .name {
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             font-weight: 700;
+            letter-spacing: 2px;
             color: #ffffff;
-            letter-spacing: 1px;
             text-transform: uppercase;
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
         }
 
-        @keyframes fadeIn {
-            to { opacity: 1; }
+        @media (max-width: 600px) {
+            .glass-card { padding: 30px; }
+            h1 { font-size: 2rem; }
+            .message-paragraph { font-size: 1.1rem; }
         }
     </style>
 </head>
@@ -111,46 +139,29 @@
 
     <div class="glass-card">
         <h1>Hey Rahul,</h1>
-        <div class="message-container">
-            <span id="typed-text"></span><span class="cursor"></span>
-        </div>
-        <div class="signature-block" id="signature">
-            <div style="color: #a0a0a0; margin-bottom: 5px;">Love you, man,</div>
+        
+        <p class="message-paragraph delay-1">
+            I miss you, bro. Things are different when you're not around, and I really need my brother by my side.
+        </p>
+        
+        <p class="message-paragraph delay-2">
+            You are the kind of friend I can always count on, and I'm lucky to have you in my life. Let's meet up soon.
+        </p>
+        
+        <div class="signature-block">
+            <div class="sign-off">Love you, man,</div>
             <div class="name">Harsh Ganjir</div>
         </div>
     </div>
 
     <script>
-        // TYPEWRITER SCRIPT
-        const textToType = "I miss you, bro. Things are different when you're not around, and I really need my brother by my side.<br><br>You are the kind of friend I can always count on, and I'm lucky to have you in my life. Let's meet up soon.";
-        const textElement = document.getElementById('typed-text');
-        const signature = document.getElementById('signature');
-        
-        // We use innerHTML for the line breaks
-        let i = 0;
-        let isTag = false;
-        let text = "";
-
-        function typeWriter() {
-            if (i < textToType.length) {
-                text = textToType.slice(0, i + 1);
-                textElement.innerHTML = text;
-                i++;
-                setTimeout(typeWriter, 40); // typing speed
-            } else {
-                setTimeout(() => {
-                    signature.style.animation = "fadeIn 1s forwards";
-                }, 500);
-            }
-        }
-        
-        setTimeout(typeWriter, 1200);
-
-        // PARTICLES SCRIPT
+        // --- INTERACTIVE PARTICLE BACKGROUND LOGIC ---
+        // (Keeping this the same since it works great!)
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
+
         let particlesArray = [];
 
         class Particle {
@@ -170,7 +181,7 @@
                 if (this.y < 0) this.y = canvas.height;
             }
             draw() {
-                ctx.fillStyle = 'rgba(79, 172, 254, 0.5)';
+                ctx.fillStyle = 'rgba(79, 172, 254, 0.4)';
                 ctx.beginPath();
                 ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
                 ctx.fill();
