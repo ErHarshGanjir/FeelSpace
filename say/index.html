@@ -7,13 +7,11 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;700&display=swap');
 
-        * {
-            box-sizing: border-box;
+        body, html {
             margin: 0;
             padding: 0;
-        }
-
-        body {
+            width: 100%;
+            height: 100%;
             font-family: 'Space Grotesk', sans-serif;
             background-color: #050505;
             color: #ffffff;
@@ -21,10 +19,8 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
         }
 
-        /* Interactive Background */
         #particle-canvas {
             position: absolute;
             top: 0;
@@ -34,7 +30,6 @@
             z-index: 1;
         }
 
-        /* The glowing message card */
         .glass-card {
             position: relative;
             z-index: 2;
@@ -43,42 +38,39 @@
             -webkit-backdrop-filter: blur(20px);
             border: 1px solid rgba(255, 255, 255, 0.1);
             border-radius: 20px;
-            padding: 50px;
-            max-width: 650px;
-            width: 90%;
-            box-shadow: 0 0 40px rgba(0, 153, 255, 0.2), inset 0 0 20px rgba(255, 255, 255, 0.05);
-            animation: cardEntrance 2s ease-out forwards;
+            padding: 40px;
+            max-width: 90%;
+            width: 600px;
+            box-shadow: 0 0 40px rgba(0, 153, 255, 0.2);
+            animation: cardEntrance 1.5s ease-out forwards;
             opacity: 0;
-            transform: scale(0.9);
+            transform: translateY(30px);
         }
 
         @keyframes cardEntrance {
-            100% {
+            to {
                 opacity: 1;
-                transform: scale(1);
+                transform: translateY(0);
             }
         }
 
         h1 {
-            font-size: 2.5rem;
-            margin-bottom: 30px;
-            font-weight: 700;
+            font-size: 2.2rem;
+            margin-bottom: 20px;
             background: linear-gradient(to right, #00f2fe, #4facfe);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            text-shadow: 0 0 20px rgba(79, 172, 254, 0.3);
             opacity: 0;
-            animation: fadeIn 1s 1s ease-out forwards;
+            animation: fadeIn 1s 0.5s forwards;
         }
 
         .message-container {
-            font-size: 1.25rem;
-            line-height: 1.8;
+            font-size: 1.2rem;
+            line-height: 1.7;
             color: #e0e0e0;
-            min-height: 150px; 
+            min-height: 120px;
         }
 
-        /* Cursor for the typewriter effect */
         .cursor {
             display: inline-block;
             width: 3px;
@@ -86,7 +78,6 @@
             background-color: #00f2fe;
             animation: blink 0.8s infinite;
             vertical-align: middle;
-            margin-left: 2px;
         }
 
         @keyframes blink {
@@ -95,37 +86,22 @@
         }
 
         .signature-block {
-            margin-top: 40px;
+            margin-top: 30px;
             opacity: 0;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
-            padding-top: 25px;
-        }
-
-        .sign-off {
-            font-size: 1.1rem;
-            color: #a0a0a0;
-            margin-bottom: 8px;
+            padding-top: 20px;
         }
 
         .name {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: 2px;
             color: #ffffff;
+            letter-spacing: 1px;
             text-transform: uppercase;
-            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
         }
 
         @keyframes fadeIn {
-            100% { opacity: 1; }
-        }
-
-        @media (max-width: 600px) {
-            .glass-card {
-                padding: 30px;
-            }
-            h1 { font-size: 2rem; }
-            .message-container { font-size: 1.1rem; }
+            to { opacity: 1; }
         }
     </style>
 </head>
@@ -135,111 +111,96 @@
 
     <div class="glass-card">
         <h1>Hey Rahul,</h1>
-        
         <div class="message-container">
             <span id="typed-text"></span><span class="cursor"></span>
         </div>
-        
         <div class="signature-block" id="signature">
-            <div class="sign-off">Love you, man,</div>
+            <div style="color: #a0a0a0; margin-bottom: 5px;">Love you, man,</div>
             <div class="name">Harsh Ganjir</div>
         </div>
     </div>
 
     <script>
-        // --- TYPEWRITER EFFECT LOGIC ---
-        const message = "I miss you, bro. Things are different when you're not around, and I really need my brother by my side.\n\nYou are the kind of friend I can always count on, and I'm lucky to have you in my life. Let's meet up soon.";
-        
+        // TYPEWRITER SCRIPT
+        const textToType = "I miss you, bro. Things are different when you're not around, and I really need my brother by my side.<br><br>You are the kind of friend I can always count on, and I'm lucky to have you in my life. Let's meet up soon.";
         const textElement = document.getElementById('typed-text');
-        const signatureBlock = document.getElementById('signature');
-        let index = 0;
+        const signature = document.getElementById('signature');
+        
+        // We use innerHTML for the line breaks
+        let i = 0;
+        let isTag = false;
+        let text = "";
 
         function typeWriter() {
-            if (index < message.length) {
-                if (message.charAt(index) === '\n') {
-                    textElement.innerHTML += "<br>";
-                } else {
-                    textElement.innerHTML += message.charAt(index);
-                }
-                index++;
-                let typingSpeed = Math.floor(Math.random() * (60 - 30 + 1)) + 30; 
-                setTimeout(typeWriter, typingSpeed);
+            if (i < textToType.length) {
+                text = textToType.slice(0, i + 1);
+                textElement.innerHTML = text;
+                i++;
+                setTimeout(typeWriter, 40); // typing speed
             } else {
                 setTimeout(() => {
-                    signatureBlock.style.animation = "fadeIn 1.5s ease-out forwards";
+                    signature.style.animation = "fadeIn 1s forwards";
                 }, 500);
             }
         }
+        
+        setTimeout(typeWriter, 1200);
 
-        // Start typing after the initial card entrance animation
-        setTimeout(typeWriter, 1500);
-
-        // --- INTERACTIVE PARTICLE BACKGROUND LOGIC ---
+        // PARTICLES SCRIPT
         const canvas = document.getElementById('particle-canvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
-
         let particlesArray = [];
 
         class Particle {
-            constructor(x, y, directionX, directionY, size, color) {
-                this.x = x;
-                this.y = y;
-                this.directionX = directionX;
-                this.directionY = directionY;
-                this.size = size;
-                this.color = color;
-            }
-            draw() {
-                ctx.beginPath();
-                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2, false);
-                ctx.fillStyle = this.color;
-                ctx.fill();
+            constructor() {
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height;
+                this.size = Math.random() * 2 + 0.5;
+                this.speedX = Math.random() * 1 - 0.5;
+                this.speedY = Math.random() * 1 - 0.5;
             }
             update() {
-                if (this.x > canvas.width || this.x < 0) {
-                    this.directionX = -this.directionX;
-                }
-                if (this.y > canvas.height || this.y < 0) {
-                    this.directionY = -this.directionY;
-                }
-                this.x += this.directionX;
-                this.y += this.directionY;
-                this.draw();
+                this.x += this.speedX;
+                this.y += this.speedY;
+                if (this.x > canvas.width) this.x = 0;
+                if (this.x < 0) this.x = canvas.width;
+                if (this.y > canvas.height) this.y = 0;
+                if (this.y < 0) this.y = canvas.height;
+            }
+            draw() {
+                ctx.fillStyle = 'rgba(79, 172, 254, 0.5)';
+                ctx.beginPath();
+                ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                ctx.fill();
             }
         }
 
         function init() {
             particlesArray = [];
-            let numberOfParticles = (canvas.height * canvas.width) / 9000;
-            for (let i = 0; i < numberOfParticles; i++) {
-                let size = (Math.random() * 2) + 1;
-                let x = (Math.random() * ((innerWidth - size * 2) - (size * 2)) + size * 2);
-                let y = (Math.random() * ((innerHeight - size * 2) - (size * 2)) + size * 2);
-                let directionX = (Math.random() * 1.5) - 0.75;
-                let directionY = (Math.random() * 1.5) - 0.75;
-                let color = 'rgba(79, 172, 254, 0.4)';
-                particlesArray.push(new Particle(x, y, directionX, directionY, size, color));
+            for (let i = 0; i < 100; i++) {
+                particlesArray.push(new Particle());
             }
         }
 
         function animate() {
-            requestAnimationFrame(animate);
-            ctx.clearRect(0, 0, innerWidth, innerHeight);
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             for (let i = 0; i < particlesArray.length; i++) {
                 particlesArray[i].update();
+                particlesArray[i].draw();
             }
+            requestAnimationFrame(animate);
         }
-
-        window.addEventListener('resize', function() {
-            canvas.width = innerWidth;
-            canvas.height = innerHeight;
-            init();
-        });
 
         init();
         animate();
+
+        window.addEventListener('resize', () => {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+            init();
+        });
     </script>
 </body>
 </html>
