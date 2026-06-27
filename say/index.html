@@ -1,4 +1,4 @@
-
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,32 +8,41 @@
 
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
 
-    <!-- Animated Background -->
+    <!-- Background -->
     <div class="background">
         <div class="stars"></div>
-        <div class="gradient"></div>
+        <div class="aurora aurora-1"></div>
+        <div class="aurora aurora-2"></div>
     </div>
 
+    <!-- Mouse Glow -->
+    <div id="mouseGlow"></div>
+
     <!-- Floating Hearts -->
-    <div id="hearts"></div>
+    <div id="heartContainer"></div>
 
     <!-- Welcome Screen -->
-    <section id="welcome" class="screen active">
+    <section id="welcome" class="page active">
 
-        <div class="welcome-box">
+        <div class="welcome-card">
 
-            <span class="small-text">A little message...</span>
+            <span class="tag">
+                A little message...
+            </span>
 
-            <h1>For Rahul ❤️</h1>
+            <h1>
+                For Rahul ❤️
+            </h1>
 
             <p>
                 Someone wanted you to read this.
             </p>
 
-            <button id="startBtn">
-                Open Letter →
+            <button id="beginBtn">
+                Open Letter
             </button>
 
         </div>
@@ -41,23 +50,31 @@
     </section>
 
     <!-- Envelope Screen -->
-    <section id="envelopeScreen" class="screen">
+    <section id="envelopePage" class="page">
 
-        <div class="envelope-wrapper">
+        <div class="scene">
 
             <div id="envelope" class="envelope">
 
-                <div class="flap"></div>
+                <div class="envelope-back"></div>
 
-                <div class="paper-preview">
+                <div class="letter-paper">
 
-                    <span>To Rahul</span>
+                    <div class="paper-title">
+                        To Rahul
+                    </div>
+
+                    <div class="paper-line"></div>
+                    <div class="paper-line"></div>
+                    <div class="paper-line short"></div>
 
                 </div>
 
+                <div class="envelope-flap"></div>
+
             </div>
 
-            <p class="click-text">
+            <p class="clickHint">
                 Click the envelope
             </p>
 
@@ -66,55 +83,53 @@
     </section>
 
     <!-- Letter Screen -->
-    <section id="letterScreen" class="screen">
+    <section id="letterPage" class="page">
 
-        <div class="letter">
+        <article class="letter">
 
-            <div class="letter-top">
+            <header>
 
                 <h2>To Rahul,</h2>
 
-                <span class="date">
-                    With love ❤️
-                </span>
+                <span>❤️</span>
 
-            </div>
+            </header>
 
-            <div id="message">
+            <div class="letterBody">
 
-                <p class="line">
+                <p class="fade">
                     Hey Rahul,
                 </p>
 
-                <p class="line">
+                <p class="fade">
                     I miss you, bro.
                 </p>
 
-                <p class="line">
+                <p class="fade">
                     Things are different when you're not around,
                     and I really need my brother by my side.
                 </p>
 
-                <p class="line">
+                <p class="fade">
                     You are the kind of friend I can always count on,
                     and I'm lucky to have you in my life.
                 </p>
 
-                <p class="line">
+                <p class="fade">
                     Let's meet up soon.
                 </p>
 
-                <p class="line ending">
+                <p class="fade ending">
                     Love you, man. ❤️
                 </p>
 
             </div>
 
-            <button id="restartBtn">
-                Read Again ↺
+            <button id="againBtn">
+                Read Again
             </button>
 
-        </div>
+        </article>
 
     </section>
 
