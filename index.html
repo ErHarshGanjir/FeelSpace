@@ -1,91 +1,223 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>H book</title>
-    
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-
-    <!-- App icon -->
-    <link rel="icon" type="image/png" href="hbook.png">
-    
-    <!-- PWA Manifest -->
-
-    <meta name="theme-color" content="#0f172a">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>A Special Message</title>
+    <!-- Premium Editorial Typography -->
+    <link rel="preconnect" href="https://googleapis.com">
+    <link rel="preconnect" href="https://gstatic.com" crossorigin>
+    <link href="https://googleapis.com/css2?family=Cinzel:wght@400;500&family=Playfair+Display:ital,wght@1,400;1,500&display=swap" rel="stylesheet">
     <style>
-        body, html {
+        :root {
+            --bg-deep: #050608;
+            --card-glass: rgba(18, 20, 26, 0.65);
+            --border-velvet: rgba(212, 175, 55, 0.12);
+            --text-gold: #dfba6b;
+            --text-pure: #f5f6f9;
+            --text-muted: #8a90a0;
+            --glow-ambient: rgba(223, 186, 107, 0.04);
+        }
+
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            box-sizing: border-box;
-            background: #fff;
         }
-        
-        #content-frame {
-            display: block;
-            width: 100%;
-            height: 100%;
-            border: none;
+
+        body {
+            background-color: var(--bg-deep);
+            color: var(--text-pure);
+            font-family: 'Playfair Display', serif;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            padding: 24px;
+            position: relative;
+        }
+
+        /* Ambient Luxury Lighting Layers */
+        body::before, body::after {
+            content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            overflow-y: scroll; 
-            -webkit-overflow-scrolling: touch;
+            width: 80vw;
+            height: 80vh;
+            border-radius: 50%;
+            background: radial-gradient(circle, var(--glow-ambient) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 0;
+        }
+        body::before { top: -20%; left: -10%; animation: floatGlow 25s infinite alternate ease-in-out; }
+        body::after { bottom: -20%; right: -10%; animation: floatGlow 30s infinite alternate-reverse ease-in-out; }
+
+        @keyframes floatGlow {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(8%, -5%) scale(1.15); }
+        }
+
+        /* Elite Premium Card */
+        .premium-card {
+            background: var(--card-glass);
+            backdrop-filter: blur(30px);
+            -webkit-backdrop-filter: blur(30px);
+            border: 1px solid var(--border-velvet);
+            padding: 50px 35px;
+            border-radius: 32px;
+            width: 100%;
+            max-width: 440px;
+            box-shadow: 0 30px 70px rgba(0, 0, 0, 0.8),
+                        inset 0 1px 0px rgba(255, 255, 255, 0.05);
+            z-index: 1;
+            text-align: center;
+            opacity: 0;
+            transform: translateY(30px);
+            animation: cardEntrance 2s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes cardEntrance {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Abstract Geometric Luxury Icon (Replacing Gemini Look) */
+        .emblem-wrapper {
+            margin-bottom: 40px;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .luxury-crest {
+            width: 28px;
+            height: 28px;
+            border: 1px solid var(--text-gold);
+            transform: rotate(45deg);
+            position: relative;
+            opacity: 0.8;
+        }
+
+        .luxury-crest::after {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            border: 1px solid var(--text-gold);
+            opacity: 0.4;
+        }
+
+        /* Typography Formatting */
+        .message-stream {
+            font-size: 1.5rem;
+            line-height: 1.8;
+            font-weight: 400;
+            min-height: 240px; /* Adapts cleanly to word injection */
+            letter-spacing: -0.2px;
+        }
+
+        /* Premium Word-by-Word Sequence Styling */
+        .word-node {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(8px) scale(0.98);
+            filter: blur(4px);
+            animation: luxuryReveal 0.6s cubic-bezier(0.215, 0.610, 0.355, 1) forwards;
+            margin-right: 7px;
+        }
+
+        @keyframes luxuryReveal {
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        /* Footer Signature */
+        .signature-footer {
+            margin-top: 50px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.7rem;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            border-top: 1px solid rgba(212, 175, 55, 0.08);
+            padding-top: 25px;
+        }
+
+        .signature-footer span {
+            color: var(--text-gold);
+            font-weight: 500;
+            display: block;
+            margin-top: 4px;
+            letter-spacing: 4px;
+        }
+
+        /* Strict Mobile Viewports Optimization */
+        @media (max-width: 480px) {
+            body { padding: 16px; }
+            .premium-card {
+                padding: 40px 24px;
+                border-radius: 24px;
+            }
+            .message-stream {
+                font-size: 1.35rem;
+                min-height: 280px;
+            }
+            .signature-footer {
+                margin-top: 40px;
+            }
         }
     </style>
 </head>
-
 <body>
-    <iframe
-        id="content-frame"
-        allow="clipboard-read; clipboard-write"
-        src="https://script.google.com/macros/s/AKfycbzni6n4VNHCVxzn9SI9FdLXzt228MV7_QZv-LpBNY0O9bm4V3Gmq6CmfbvzrA-p5I_S/exec">
-    </iframe>
 
-    <button id="installBtn" style="
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  padding: 10px 16px;
-  background: #0f172a;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  font-size: 14px;
-  cursor: pointer;
-  z-index: 999999;
-  display: none;">
-  ⬇ Install App
-</button>
+    <div class="premium-card">
+        <!-- New Custom Minimal Geometric Crest -->
+        <div class="emblem-wrapper">
+            <div class="luxury-crest"></div>
+        </div>
 
+        <!-- Word Stream Target Area -->
+        <div class="message-stream" id="text-target"></div>
 
-    <!-- Service worker registration -->
-<script>
-let deferredPrompt;
-const installBtn = document.getElementById("installBtn");
+        <!-- Tailored Footer Feature -->
+        <div class="signature-footer">
+            Shared with Care
+            <span>by Harsh</span>
+        </div>
+    </div>
 
-window.addEventListener('beforeinstallprompt', (e) => {
-  e.preventDefault();
-  deferredPrompt = e;
-  installBtn.style.display = 'block';
+    <script>
+        const rawString = "Hey Rahul, this is the best way for me to share my feelings. I cherished the golden time we spent together, and you still appear in my dreams. I am truly impressed by you, and I wish we could always stay connected.";
+        
+        const segmentArray = rawString.split(" ");
+        const targetDOM = document.getElementById("text-target");
+        
+        // Luxury pacing configurations (ms)
+        const sequenceInterval = 200; 
+        const introductoryPause = 1000; 
 
-  installBtn.addEventListener('click', () => {
-    installBtn.style.display = 'none';
-    deferredPrompt.prompt();
+        function initializeTyping() {
+            segmentArray.forEach((wordStr, pos) => {
+                const node = document.createElement("span");
+                node.classList.add("word-node");
+                node.textContent = wordStr;
+                
+                // Fine-tuned animation cascade delay matrix
+                node.style.animationDelay = `${introductoryPause + (pos * sequenceInterval)}ms`;
+                
+                targetDOM.appendChild(node);
+            });
+        }
 
-    deferredPrompt.userChoice.then((choiceResult) => {
-      if (choiceResult.outcome === 'accepted') {
-        console.log('User accepted the install prompt');
-      }
-      deferredPrompt = null;
-    });
-  });
-});
-</script>
-
-
+        window.addEventListener("DOMContentLoaded", initializeTyping);
+    </script>
 </body>
 </html>
