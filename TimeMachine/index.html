@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Time Machine</title>
+    <style>
+        :root {
+            --primary: #0ff;
+            --bg: #050505;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            font-family: 'Courier New', Courier, monospace;
+            background-color: var(--bg);
+            color: var(--primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            user-select: none;
+            transition: background-color 0.5s;
+        }
+
+        /* Titles and Text */
+        h1 {
+            font-size: 3rem;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            text-shadow: 0 0 10px var(--primary);
+            margin-bottom: 10px;
+            z-index: 10;
+        }
+
+        .status {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            text-align: center;
+            height: 2rem;
+            z-index: 10;
+        }
+
+        .warning {
+            color: #ff3333;
+            text-shadow: 0 0 10px #ff3333;
+            animation: blink 1s infinite;
+        }
+
+        /* The Scanner Button */
+        .scanner-container {
+            position: relative;
+            width: 200px;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            cursor: pointer;
+        }
+
+        .fingerprint {
+            width: 120px;
+            height: 160px;
+            border: 4px solid var(--primary);
+            border-radius: 50px 50px 40px 40px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 0 20px var(--primary), inset 0 0 20px var(--primary);
+            transition: all 0.3s ease;
+        }
+
+        /* Scanning laser effect */
+        .fingerprint::after {
+            content: '';
+            position: absolute;
+            top: -10px;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: #fff;
+            box-shadow: 0 0 15px 5px var(--primary);
+            animation: scan 2s infinite linear;
+            display: none;
+        }
+
+        /* Progress Circle */
+        .progress-ring {
+            position: absolute;
+            width: 220px;
+            height: 220px;
+            border-radius: 50%;
+            border: 5px dashed transparent;
+            transition: transform 0.1s;
+        }
+
+        /* Active State Animations */
+        body.traveling {
+            animation: timeWarpColors 2s infinite, shake 0.5s infinite;
+        }
+
+        body.traveling .fingerprint {
+            box-shadow: 0 0 50px var(--primary), inset 0 0 50px var(--primary);
+            transform: scale(0.95);
+        }
+
+        body.traveling .fingerprint::after {
+            display: block;
+        }
+
+        body.traveling .progress-ring {
+            border-color: var(--primary);
+            animation: spin 2s infinite linear;
+        }
+
+        /* Modal / Results Screen */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 100;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .modal h2 {
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .modal p {
+            font-size: 1.5rem;
+            max-width: 600px;
+            line-height: 1.5;
+            color: #0ff;
+        }
+
+        .restart-btn {
+            margin-top: 30px;
+            padding: 15px 30px;
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+            font-size: 1.2rem;
+            cursor: pointer;
+            font-family: inherit;
+            text-transform: uppercase;
+            transition: 0.3s;
+        }
+
+        .restart-btn:hover {
+            background: var(--primary);
+            color: #000;
+        }
+
+        /* Keyframes */
+        @keyframes scan {
+            0% { top: -10px; }
+            50% { top: 100%; }
+            100% { top: -10px; }
+        }
+
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        @keyframes timeWarpColors {
+            0% { background-color: #050505; }
+            20% { background-color: #1a0033; }
+            40% { background-color: #002244; }
+            60% { background-color: #33001a; }
+            80% { background-color: #003311; }
+            100% { background-color: #050505; }
+        }
+
+        @keyframes shake {
+            0% { transform: translate(1px, 1px) rotate(0deg); }
+            10% { transform: translate(-1px, -2px) rotate(-1deg); }
+            20% { transform: translate(-3px, 0px) rotate(1deg); }
+            30% { transform: translate(3px, 2px) rotate(0deg); }
+            40% { transform: translate(1px, -1px) rotate(1deg); }
+            50% { transform: translate(-1px, 2px) rotate(-1deg); }
+            60% { transform: translate(-3px, 1px) rotate(0deg); }
+            70% { transform: translate(3px, 1px) rotate(-1deg); }
+            80% { transform: translate(-1px, -1px) rotate(1deg); }
+            90% { transform: translate(1px, 2px) rotate(0deg); }
+            100% { transform: translate(1px, -2px) rotate(-1deg); }
+        }
+
+        /* Hyperspace background lines */
+        .stars {
+            position: absolute;
+            top: 50%; left: 50%;
+            width: 200vw; height: 200vh;
+            background: repeating-radial-gradient(circle at center, transparent 0, transparent 10px, rgba(0, 255, 255, 0.1) 11px, rgba(0, 255, 255, 0.1) 15px);
+            transform: translate(-50%, -50%);
+            opacity: 0;
+            z-index: 1;
+            pointer-events: none;
+            transition: opacity 1s;
+        }
+
+        body.traveling .stars {
+            opacity: 1;
+            animation: spin 3s infinite linear;
+        }
+
+        #progress-text {
+            position: absolute;
+            top: 50px;
+            font-size: 2rem;
+            z-index: 10;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="stars"></div>
+
+    <h1>Time Machine</h1>
+    <div class="status" id="status-text">
+        <span class="warning">⚠️ Wash your hands first!</span><br>
+        Hold your finger on the scanner to initiate time travel.
+    </div>
+
+    <div id="progress-text">0%</div>
+
+    <div class="scanner-container" id="scanner">
+        <div class="progress-ring"></div>
+        <div class="fingerprint"></div>
+    </div>
+
+    <!-- Results Modal -->
+    <div class="modal" id="result-modal">
+        <h2 id="result-title">TIME TRAVEL COMPLETE</h2>
+        <p id="result-message"></p>
+        <button class="restart-btn" onclick="resetMachine()">Return to Present</button>
+    </div>
+
+    <script>
+        const scanner = document.getElementById('scanner');
+        const statusText = document.getElementById('status-text');
+        const progressText = document.getElementById('progress-text');
+        const resultModal = document.getElementById('result-modal');
+        const resultMessage = document.getElementById('result-message');
+        const resultTitle = document.getElementById('result-title');
+
+        let holdTimer;
+        let progressInterval;
+        let progress = 0;
+        const requiredTime = 15000; // 15 seconds in milliseconds
+
+        // Funny randomized responses
+        const outcomes = [
+            {
+                title: "CRITICAL DANGER!",
+                message: "Your time-space continuum crashed. You are now in a completely different universe. Everything here looks exactly the same, but to ensure your safety, pretend nothing happened. Do NOT let anyone know you are from a different universe. They are watching."
+            },
+            {
+                title: "SUCCESS... SORT OF",
+                message: "You have successfully time traveled exactly 15 seconds into the future! Everything looks exactly like the past, but you are slightly older and your arm is tired."
+            },
+            {
+                title: "DESTINATION: 1998",
+                message: "Welcome to 1998! The internet is making a terrible screeching sound, you are wearing frosted tips, and your Tamagotchi is dying. Good luck."
+            },
+            {
+                title: "DESTINATION: 2050",
+                message: "Good news: Flying cars exist! Bad news: You still can't afford one. Also, dogs are now the global government."
+            },
+            {
+                title: "ERROR 404: DINOSAUR NOT FOUND",
+                message: "You were supposed to go to the Jurassic period, but the system glitched and dropped you into a giant chicken farm in 2012. Close enough?"
+            },
+            {
+                title: "TIMELINE SHIFT",
+                message: "Time jump complete. You are now exactly 2 inches to the left of where you used to be in the timeline. The butterfly effect means your keys are forever lost."
+            }
+        ];
+
+        function startTimeTravel(e) {
+            e.preventDefault(); // Prevent text selection/scrolling on mobile
+            
+            // Reset state
+            progress = 0;
+            document.body.classList.add('traveling');
+            statusText.innerHTML = "SYSTEM PROCESSING...<br>DO NOT REMOVE FINGER. SPACE-TIME DESTABILIZING!";
+            statusText.style.color = "#0ff";
+
+            // Update progress text
+            progressInterval = setInterval(() => {
+                progress += (100 / (requiredTime / 100)); // Calculate percentage based on 100ms intervals
+                if(progress >= 100) progress = 100;
+                progressText.innerText = Math.floor(progress) + "%";
+            }, 100);
+
+            // Set final timer
+            holdTimer = setTimeout(() => {
+                completeTimeTravel();
+            }, requiredTime);
+        }
+
+        function cancelTimeTravel() {
+            if (progress >= 100) return; // Ignore if already finished
+
+            clearTimeout(holdTimer);
+            clearInterval(progressInterval);
+            
+            if (progress > 0 && progress < 100) {
+                statusText.innerHTML = "<span class='warning'>CONNECTION LOST!</span><br>You let go too early! Wash hands and try again.";
+            } else {
+                statusText.innerHTML = "<span class='warning'>⚠️ Wash your hands first!</span><br>Hold your finger on the scanner to initiate time travel.";
+            }
+
+            progress = 0;
+            progressText.innerText = "0%";
+            document.body.classList.remove('traveling');
+        }
+
+        function completeTimeTravel() {
+            clearTimeout(holdTimer);
+            clearInterval(progressInterval);
+            document.body.classList.remove('traveling');
+            
+            // Pick a random funny response
+            const randomOutcome = outcomes[Math.floor(Math.random() * outcomes.length)];
+            
+            // Make sure the "Danger" one looks scarier
+            if(randomOutcome.title === "CRITICAL DANGER!") {
+                resultTitle.style.color = "#ff3333";
+                resultMessage.style.color = "#ff9999";
+            } else {
+                resultTitle.style.color = "#fff";
+                resultMessage.style.color = "#0ff";
+            }
+
+            resultTitle.innerText = randomOutcome.title;
+            resultMessage.innerText = randomOutcome.message;
+            
+            resultModal.style.display = "flex";
+        }
+
+        function resetMachine() {
+            resultModal.style.display = "none";
+            progress = 0;
+            progressText.innerText = "0%";
+            statusText.innerHTML = "<span class='warning'>⚠️ Wash your hands first!</span><br>Hold your finger on the scanner to initiate time travel.";
+        }
+
+        // Mouse Events (Desktop)
+        scanner.addEventListener('mousedown', startTimeTravel);
+        scanner.addEventListener('mouseup', cancelTimeTravel);
+        scanner.addEventListener('mouseleave', cancelTimeTravel);
+
+        // Touch Events (Mobile)
+        scanner.addEventListener('touchstart', startTimeTravel, {passive: false});
+        scanner.addEventListener('touchend', cancelTimeTravel);
+        scanner.addEventListener('touchcancel', cancelTimeTravel);
+
+    </script>
+</body>
+</html>
