@@ -1,374 +1,435 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>TIME MACHINE // CHRONO-SCANNER v9.4</title>
-  <style>
-    :root {
-      --primary: #00ffcc;
-      --secondary: #ff00ff;
-      --danger: #ff3333;
-      --bg: #050811;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantum Temporal Gateway</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@500;700&display=swap');
 
-    * {
-      box-sizing: border-box;
-      user-select: none;
-    }
+        :root {
+            --cyan: #00f3ff;
+            --purple: #bc13fe;
+            --bg-dark: #070714;
+            --glass: rgba(16, 16, 36, 0.6);
+        }
 
-    body {
-      margin: 0;
-      padding: 0;
-      background-color: var(--bg);
-      font-family: 'Courier New', Courier, monospace;
-      color: var(--primary);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      min-height: 100vh;
-      overflow: hidden;
-      transition: background 0.8s ease;
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    /* Animated Grid Background */
-    .grid-bg {
-      position: absolute;
-      width: 200vw;
-      height: 200vh;
-      background-image: 
-        linear-gradient(rgba(0, 255, 204, 0.1) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(0, 255, 204, 0.1) 1px, transparent 1px);
-      background-size: 40px 40px;
-      z-index: -1;
-      transform: perspective(500px) rotateX(60deg);
-      animation: gridMove 10s linear infinite;
-    }
+        body, html {
+            width: 100%;
+            height: 100%;
+            background-color: var(--bg-dark);
+            color: #fff;
+            font-family: 'Rajdhani', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            user-select: none;
+        }
 
-    @keyframes gridMove {
-      0% { transform: perspective(500px) rotateX(60deg) translateY(0); }
-      100% { transform: perspective(500px) rotateX(60deg) translateY(40px); }
-    }
+        /* Modern Background Animations */
+        .bg-grid {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 243, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            z-index: 0;
+            transform: perspective(500px) rotateX(60deg) translateY(-100px) translateZ(-200px);
+            animation: gridMove 10s infinite linear;
+        }
 
-    .container {
-      text-align: center;
-      z-index: 10;
-      max-width: 600px;
-      padding: 20px;
-    }
+        @keyframes gridMove {
+            0% { background-position: 0 0; }
+            100% { background-position: 0 40px; }
+        }
 
-    h1 {
-      font-size: 2.2rem;
-      letter-spacing: 4px;
-      text-shadow: 0 0 10px var(--primary);
-      margin-bottom: 5px;
-    }
+        /* Glassmorphism UI Panel */
+        .ui-panel {
+            position: relative;
+            z-index: 10;
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(0, 243, 255, 0.2);
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(0, 243, 255, 0.05);
+            max-width: 90%;
+            width: 450px;
+            transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
 
-    .status-box {
-      min-height: 60px;
-      margin: 20px 0;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: #fff;
-      text-shadow: 0 0 8px var(--secondary);
-    }
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            color: var(--cyan);
+            text-shadow: 0 0 10px var(--cyan);
+            margin-bottom: 10px;
+            text-align: center;
+        }
 
-    /* Fingerprint Scanner Button */
-    .scanner-outer {
-      position: relative;
-      width: 220px;
-      height: 220px;
-      margin: 30px auto;
-      border: 3px dashed var(--primary);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      box-shadow: 0 0 25px rgba(0, 255, 204, 0.3);
-      transition: all 0.3s ease;
-    }
+        .status {
+            font-size: 1.2rem;
+            color: #aaa;
+            text-align: center;
+            height: 40px;
+            margin-bottom: 30px;
+        }
 
-    .scanner-outer:active {
-      transform: scale(0.95);
-    }
+        .highlight {
+            color: var(--purple);
+            font-weight: bold;
+            text-shadow: 0 0 8px var(--purple);
+        }
 
-    .fingerprint-icon {
-      font-size: 80px;
-      filter: drop-shadow(0 0 10px var(--primary));
-      transition: transform 0.2s;
-    }
+        /* Modern SVG Scanner */
+        .scanner-wrapper {
+            position: relative;
+            width: 250px;
+            height: 250px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin-bottom: 20px;
+        }
 
-    /* Laser Scan Line */
-    .laser {
-      position: absolute;
-      width: 100%;
-      height: 4px;
-      background: var(--secondary);
-      box-shadow: 0 0 15px var(--secondary);
-      top: 0;
-      left: 0;
-      display: none;
-      animation: scanLaser 1.2s ease-in-out infinite alternate;
-    }
+        /* Progress Circle */
+        .progress-svg {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            transform: rotate(-90deg);
+            pointer-events: none;
+        }
 
-    @keyframes scanLaser {
-      0% { top: 10%; opacity: 0.8; }
-      100% { top: 90%; opacity: 1; }
-    }
+        .progress-bg {
+            fill: none;
+            stroke: rgba(255, 255, 255, 0.05);
+            stroke-width: 8;
+        }
 
-    /* Progress Ring */
-    .progress-ring {
-      position: absolute;
-      top: -10px;
-      left: -10px;
-      width: 240px;
-      height: 240px;
-      transform: rotate(-90deg);
-    }
+        .progress-bar {
+            fill: none;
+            stroke: var(--cyan);
+            stroke-width: 8;
+            stroke-linecap: round;
+            stroke-dasharray: 722; /* 2 * PI * 115(r) */
+            stroke-dashoffset: 722;
+            transition: stroke-dashoffset 0.1s linear, stroke 0.5s;
+            filter: drop-shadow(0 0 8px var(--cyan));
+        }
 
-    .progress-ring circle {
-      fill: transparent;
-      stroke: var(--secondary);
-      stroke-width: 8;
-      stroke-dasharray: 700;
-      stroke-dashoffset: 700;
-      transition: stroke-dashoffset 0.2s linear;
-    }
+        /* The Fingerprint Area */
+        .finger-zone {
+            width: 140px;
+            height: 140px;
+            background: radial-gradient(circle, rgba(0,243,255,0.1) 0%, transparent 70%);
+            border: 2px dashed rgba(0, 243, 255, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: rgba(0, 243, 255, 0.5);
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
 
-    /* Warp Speed Visual Effects */
-    .warp-active {
-      animation: warpShake 0.1s infinite;
-    }
+        /* Active Traveling State */
+        body.traveling .finger-zone {
+            border-color: var(--cyan);
+            color: var(--cyan);
+            box-shadow: 0 0 30px rgba(0, 243, 255, 0.4), inset 0 0 30px rgba(0, 243, 255, 0.4);
+            transform: scale(0.95);
+        }
 
-    @keyframes warpShake {
-      0% { transform: translate(2px, 1px) rotate(0deg); }
-      50% { transform: translate(-1px, -2px) rotate(-1deg); }
-      100% { transform: translate(-2px, 0px) rotate(1deg); }
-    }
+        body.traveling .ui-panel {
+            transform: scale(1.02);
+            box-shadow: 0 0 60px rgba(188, 19, 254, 0.2), inset 0 0 20px rgba(0, 243, 255, 0.1);
+        }
 
-    /* Result Modal */
-    .modal {
-      display: none;
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: rgba(10, 15, 30, 0.95);
-      border: 2px solid var(--primary);
-      padding: 30px;
-      border-radius: 15px;
-      box-shadow: 0 0 50px var(--primary);
-      max-width: 500px;
-      width: 90%;
-      z-index: 100;
-      text-align: center;
-    }
+        body.traveling .progress-bar {
+            stroke: var(--purple);
+            filter: drop-shadow(0 0 15px var(--purple));
+        }
 
-    .modal h2 {
-      color: var(--secondary);
-      margin-top: 0;
-    }
+        /* Scanning Line */
+        .scan-line {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 4px;
+            background: #fff;
+            box-shadow: 0 0 15px 5px var(--purple);
+            opacity: 0;
+        }
 
-    .modal p {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      color: #fff;
-    }
+        body.traveling .scan-line {
+            opacity: 1;
+            animation: scanLine 1.5s infinite linear;
+        }
 
-    .btn-reset {
-      margin-top: 20px;
-      padding: 12px 25px;
-      background: transparent;
-      border: 2px solid var(--primary);
-      color: var(--primary);
-      font-family: inherit;
-      font-size: 1rem;
-      font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 0 10px var(--primary);
-    }
+        @keyframes scanLine {
+            0% { top: -10%; }
+            100% { top: 110%; }
+        }
 
-    .btn-reset:hover {
-      background: var(--primary);
-      color: #000;
-    }
+        /* Modern Orbital Rings during travel */
+        .orbit {
+            position: absolute;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            border-top-color: var(--cyan);
+            border-bottom-color: var(--purple);
+            opacity: 0;
+            transition: opacity 0.5s;
+            pointer-events: none;
+        }
 
-    .danger-mode {
-      border-color: var(--danger) !important;
-      box-shadow: 0 0 50px var(--danger) !important;
-    }
+        .orbit-1 { width: 350px; height: 350px; animation: spinLeft 4s infinite linear; }
+        .orbit-2 { width: 450px; height: 450px; animation: spinRight 6s infinite linear; border-top-color: var(--purple); border-bottom-color: var(--cyan); }
+        
+        body.traveling .orbit { opacity: 0.5; }
 
-    .danger-mode h2 {
-      color: var(--danger) !important;
-    }
-  </style>
+        @keyframes spinLeft { 100% { transform: rotate(-360deg); } }
+        @keyframes spinRight { 100% { transform: rotate(360deg); } }
+
+        /* Modal Overlay */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(7, 7, 20, 0.9);
+            backdrop-filter: blur(20px);
+            z-index: 100;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.9); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        .modal h2 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            color: #fff;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px var(--cyan);
+        }
+
+        .modal p {
+            font-size: 1.5rem;
+            max-width: 600px;
+            line-height: 1.6;
+            color: #ddd;
+        }
+
+        .modal p span.system-ok { color: #00ff66; font-weight: bold; text-shadow: 0 0 8px #00ff66;}
+        .modal p span.user-error { color: #ff3366; font-weight: bold; text-shadow: 0 0 8px #ff3366;}
+
+        .btn {
+            margin-top: 40px;
+            padding: 15px 40px;
+            background: transparent;
+            border: 2px solid var(--cyan);
+            border-radius: 8px;
+            color: var(--cyan);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.2rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            transition: all 0.3s;
+            box-shadow: 0 0 15px rgba(0, 243, 255, 0.2);
+        }
+
+        .btn:hover {
+            background: var(--cyan);
+            color: var(--bg-dark);
+            box-shadow: 0 0 30px var(--cyan);
+        }
+    </style>
 </head>
 <body>
 
-  <div class="grid-bg"></div>
+    <div class="bg-grid"></div>
 
-  <div class="container" id="main-container">
-    <h1>CHRONO-PORTAL v9.4</h1>
-    <p>HOLD FINGERPRINT FOR 15 SECONDS TO INITIATE TIME TRAVEL</p>
+    <div class="orbit orbit-1"></div>
+    <div class="orbit orbit-2"></div>
 
-    <div class="status-box" id="status-text">
-      SYSTEM READY: PLACE AND HOLD FINGERPRINT
+    <div class="ui-panel">
+        <h1>Quantum Gateway</h1>
+        <div class="status" id="status-text">
+            Awaiting biometric sequence...<br>
+            <span class="highlight">Hold fingerprint firmly to initiate.</span>
+        </div>
+
+        <div class="scanner-wrapper" id="scanner">
+            <svg class="progress-svg" viewBox="0 0 250 250">
+                <circle class="progress-bg" cx="125" cy="125" r="115"></circle>
+                <circle class="progress-bar" id="progress-circle" cx="125" cy="125" r="115"></circle>
+            </svg>
+            
+            <div class="finger-zone">
+                <div class="scan-line"></div>
+                <span id="percentage-text">0%</span>
+            </div>
+        </div>
     </div>
 
-    <div class="scanner-outer" id="scanner">
-      <svg class="progress-ring">
-        <circle id="progress-circle" cx="120" cy="120" r="110"></circle>
-      </svg>
-      <div class="laser" id="laser"></div>
-      <div class="fingerprint-icon">👆</div>
+    <!-- Results Modal -->
+    <div class="modal" id="result-modal">
+        <h2 id="result-title">PROCESS TERMINATED</h2>
+        <p id="result-message"></p>
+        <button class="btn" onclick="resetMachine()">Acknowledge & Restart</button>
     </div>
-  </div>
 
-  <!-- Outcome Modal -->
-  <div class="modal" id="result-modal">
-    <h2 id="modal-title">TIME TRAVEL COMPLETE</h2>
-    <p id="modal-desc">You have arrived in your destination timeline.</p>
-    <button class="btn-reset" onclick="resetSystem()">TRAVEL AGAIN</button>
-  </div>
+    <script>
+        const scanner = document.getElementById('scanner');
+        const statusText = document.getElementById('status-text');
+        const progressCircle = document.getElementById('progress-circle');
+        const percentageText = document.getElementById('percentage-text');
+        const resultModal = document.getElementById('result-modal');
+        const resultMessage = document.getElementById('result-message');
+        const resultTitle = document.getElementById('result-title');
 
-  <script>
-    const scanner = document.getElementById('scanner');
-    const statusText = document.getElementById('status-text');
-    const laser = document.getElementById('laser');
-    const progressCircle = document.getElementById('progress-circle');
-    const modal = document.getElementById('result-modal');
-    const modalTitle = document.getElementById('modal-title');
-    const modalDesc = document.getElementById('modal-desc');
-    const mainContainer = document.getElementById('main-container');
+        let holdTimer;
+        let progressInterval;
+        let progress = 0;
+        const requiredTime = 15000; // 15 seconds
+        const maxDashOffset = 722; // Circumference of the SVG circle
 
-    const REQUIRED_TIME = 15000; // 15 Seconds
-    let pressTimer = null;
-    let startTime = 0;
-    let isScanning = false;
+        // The funny responses: System works perfectly, user is the problem.
+        const outcomes = [
+            {
+                title: "TIME TRAVEL DENIED",
+                message: "<span class='system-ok'>System Status: 100% Perfect. Working Flawlessly.</span><br><br><span class='user-error'>Error Code 401: Germs Detected.</span><br>We do not allow temporal transit for users with unwashed hands. We cannot risk introducing your specific bacteria to the Cretaceous period. Go wash your hands and try again."
+            },
+            {
+                title: "PROCESS ABORTED",
+                message: "<span class='system-ok'>Quantum Engine: Operational. Trajectory: Locked.</span><br><br><span class='user-error'>Error Code 88: Trash Mobile Device.</span><br>Our multimillion-dollar system works perfectly, but your phone's processor is too weak to render the 4th dimension. Please upgrade your device to time travel."
+            },
+            {
+                title: "ACCESS RESTRICTED",
+                message: "<span class='system-ok'>Chroniton Emitters: Perfect. Server Status: Flawless.</span><br><br><span class='user-error'>Error Code 109: Smudged Screen.</span><br>The gateway collapsed because your screen is filthy. Your greasy fingerprints deflected the temporal lasers. Clean your display, human."
+            },
+            {
+                title: "TIMELINE REJECTED YOU",
+                message: "<span class='system-ok'>System Diagnostics: Exceptional. Phenomenal, even.</span><br><br><span class='user-error'>Error Code 404: Lack of Vibes.</span><br>The future scanned your personality profile and decided you aren't cool enough for 2099. The past also politely declined your visit. System is fine; you are just boring."
+            },
+            {
+                title: "CRITICAL ALERT",
+                message: "<span class='system-ok'>System Core: Stable and Perfect.</span><br><br><span class='user-error'>Error Code 999: Multiverse Fracture.</span><br>Because you hesitated slightly, the space-time continuum split. You are now in a completely different universe. Everything looks exactly the same, but for your safety, do not let anyone know you are from a different reality. Act normal."
+            },
+            {
+                title: "CONNECTION FAILED",
+                message: "<span class='system-ok'>Temporal Servers: Lightning Fast.</span><br><br><span class='user-error'>Error Code 001: Sweaty Palms.</span><br>Our advanced biometric scanners cannot authenticate you because your hands are sweating profusely. Are you nervous about altering history? Calm down and dry your hands."
+            }
+        ];
 
-    // Quirky messages shown during the 15-second hold
-    const progressMessages = [
-      { time: 1000, text: "SCANNING BIOMETRICS... WARMING UP FLUX CAPACITOR" },
-      { time: 3000, text: "⚠️ WARNING: WASH YOUR HANDS FIRST! DETECTING SNACK RESIDUE..." },
-      { time: 6000, text: "CALIBRATING QUANTUM COORDINATES... HOLD STEADY!" },
-      { time: 9000, text: "RIPPING FABRIC OF SPACE-TIME... DO NOT LET GO!" },
-      { time: 12000, text: "ALMOST THERE! DIVERGING UNIVERSAL TIMELINE..." },
-      { time: 14000, text: "HYPER-JUMP IMMINENT! BRACE FOR IMPACT!" }
-    ];
+        function startTimeTravel(e) {
+            e.preventDefault(); 
+            
+            progress = 0;
+            document.body.classList.add('traveling');
+            statusText.innerHTML = "Initializing Quantum Tunnel...<br><span style='color: var(--cyan);'>MAINTAIN BIOMETRIC CONTACT.</span>";
 
-    // Funny Destination Outcomes
-    const funnyOutcomes = [
-      "You traveled 10 minutes into the future! Unfortunately, your coffee is now lukewarm.",
-      "You arrived in 65,000,000 BCE. A T-Rex is currently judging your outfit.",
-      "You traveled to the year 3024. Good news: Time machines are cheap. Bad news: Toilets require calculus to operate.",
-      "You successfully traveled to yesterday! You still forgot where you left your keys.",
-      "Time Jump Complete: You are now 5 seconds younger, but you owe the Space-Time IRS $40,000 in causality taxes.",
-      "You arrived in medieval Europe! They immediately declared your smartphone a witch.",
-      "You jumped to 1999! Please warn everyone that Y2K is just a lot of paperwork.",
-      "You traveled to an era where dogs rule the planet. Sit. Stay. Good human.",
-      "You arrived in the year 2050. Flying cars exist, but traffic is still terrible in 3D."
-    ];
+            progressInterval = setInterval(() => {
+                progress += (100 / (requiredTime / 50)); 
+                if(progress >= 100) progress = 100;
+                
+                // Update text
+                percentageText.innerText = Math.floor(progress) + "%";
+                
+                // Update SVG Circle (Dash offset goes from 722 down to 0)
+                const offset = maxDashOffset - (progress / 100) * maxDashOffset;
+                progressCircle.style.strokeDashoffset = offset;
 
-    // The iconic multiverse safety warning
-    const dangerOutcome = {
-      title: "⚠️ DANGER: TIME-SPACE CRASHED ⚠️",
-      text: "CRITICAL ALERT: Your time-space continuum has collapsed! You have been dumped into a DIFFERENT UNIVERSE.<br><br>Everything here looks 100% IDENTICAL to your original universe. Make sure NO ONE determines you are from a different universe. This protocol is strictly for your own safety! Act normal."
-    };
+            }, 50);
 
-    function startScan(e) {
-      e.preventDefault();
-      if (isScanning) return;
-      isScanning = true;
-      startTime = Date.now();
-      laser.style.display = 'block';
-      statusText.style.color = '#00ffcc';
-
-      pressTimer = setInterval(updateProgress, 50);
-    }
-
-    function stopScan(e) {
-      e.preventDefault();
-      if (!isScanning) return;
-      isScanning = false;
-      clearInterval(pressTimer);
-      laser.style.display = 'none';
-      progressCircle.style.strokeDashoffset = 700;
-      document.body.style.backgroundColor = '#050811';
-      mainContainer.classList.remove('warp-active');
-
-      statusText.innerHTML = "⚠️ JUMP ABORTED! You released your finger too early!";
-      statusText.style.color = '#ff3333';
-    }
-
-    function updateProgress() {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / REQUIRED_TIME, 1);
-
-      // Circle dash animation (700 is full offset)
-      const offset = 700 - (progress * 700);
-      progressCircle.style.strokeDashoffset = offset;
-
-      // Dynamic color & background shifts during hold
-      if (progress > 0.3 && progress <= 0.6) {
-        document.body.style.backgroundColor = '#1a002c'; // Purple shift
-      } else if (progress > 0.6 && progress <= 0.85) {
-        document.body.style.backgroundColor = '#2c0000'; // Red danger shift
-      } else if (progress > 0.85) {
-        document.body.style.backgroundColor = '#001a14'; // Hyper green shift
-        mainContainer.classList.add('warp-active');
-      }
-
-      // Display humorous messages at time thresholds
-      for (let msg of progressMessages) {
-        if (elapsed >= msg.time && elapsed < msg.time + 1500) {
-          statusText.innerHTML = msg.text;
+            holdTimer = setTimeout(() => {
+                completeTimeTravel();
+            }, requiredTime);
         }
-      }
 
-      // Check if 15 seconds are completed
-      if (elapsed >= REQUIRED_TIME) {
-        clearInterval(pressTimer);
-        isScanning = false;
-        laser.style.display = 'none';
-        mainContainer.classList.remove('warp-active');
-        triggerOutcome();
-      }
-    }
+        function cancelTimeTravel() {
+            if (progress >= 100) return; 
 
-    function triggerOutcome() {
-      modal.classList.remove('danger-mode');
+            clearTimeout(holdTimer);
+            clearInterval(progressInterval);
+            
+            if (progress > 0 && progress < 100) {
+                statusText.innerHTML = "<span style='color: #ff3366;'>BIOMETRIC LOCK LOST.</span><br>You let go. Try again without shaking.";
+            } else {
+                statusText.innerHTML = "Awaiting biometric sequence...<br><span class='highlight'>Hold fingerprint firmly to initiate.</span>";
+            }
 
-      // 25% chance to trigger the Dangerous Multiverse Warning
-      const isDanger = Math.random() < 0.25;
+            // Reset visual states smoothly
+            progress = 0;
+            percentageText.innerText = "0%";
+            progressCircle.style.strokeDashoffset = maxDashOffset;
+            document.body.classList.remove('traveling');
+        }
 
-      if (isDanger) {
-        modal.classList.add('danger-mode');
-        modalTitle.innerHTML = dangerOutcome.title;
-        modalDesc.innerHTML = dangerOutcome.text;
-      } else {
-        const randomIndex = Math.floor(Math.random() * funnyOutcomes.length);
-        modalTitle.innerHTML = "✨ TIME TRAVEL COMPLETE ✨";
-        modalDesc.innerHTML = funnyOutcomes[randomIndex];
-      }
+        function completeTimeTravel() {
+            clearTimeout(holdTimer);
+            clearInterval(progressInterval);
+            document.body.classList.remove('traveling');
+            
+            const randomOutcome = outcomes[Math.floor(Math.random() * outcomes.length)];
+            
+            if(randomOutcome.title === "CRITICAL ALERT") {
+                resultTitle.style.color = "#ff3366";
+                resultTitle.style.textShadow = "0 0 15px #ff3366";
+            } else {
+                resultTitle.style.color = "#00f3ff";
+                resultTitle.style.textShadow = "0 0 15px #00f3ff";
+            }
 
-      modal.style.display = 'block';
-    }
+            resultTitle.innerText = randomOutcome.title;
+            resultMessage.innerHTML = randomOutcome.message;
+            
+            resultModal.style.display = "flex";
+        }
 
-    function resetSystem() {
-      modal.style.display = 'none';
-      progressCircle.style.strokeDashoffset = 700;
-      document.body.style.backgroundColor = '#050811';
-      statusText.innerHTML = "SYSTEM READY: PLACE AND HOLD FINGERPRINT";
-      statusText.style.color = '#00ffcc';
-    }
+        function resetMachine() {
+            resultModal.style.display = "none";
+            progress = 0;
+            percentageText.innerText = "0%";
+            progressCircle.style.strokeDashoffset = maxDashOffset;
+            statusText.innerHTML = "Awaiting biometric sequence...<br><span class='highlight'>Hold fingerprint firmly to initiate.</span>";
+        }
 
-    // Touch and Mouse Event Listeners
-    scanner.addEventListener('mousedown', startScan);
-    window.addEventListener('mouseup', stopScan);
-    scanner.addEventListener('touchstart', startScan);
-    window.addEventListener('touchend', stopScan);
-  </script>
+        // Mouse Events
+        scanner.addEventListener('mousedown', startTimeTravel);
+        window.addEventListener('mouseup', cancelTimeTravel);
+
+        // Touch Events
+        scanner.addEventListener('touchstart', startTimeTravel, {passive: false});
+        window.addEventListener('touchend', cancelTimeTravel);
+        window.addEventListener('touchcancel', cancelTimeTravel);
+
+    </script>
 </body>
 </html>
