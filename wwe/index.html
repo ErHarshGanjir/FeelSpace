@@ -955,482 +955,656 @@
 
     <script>
 
-        /* ==========================================
-           TARGET
-        ========================================== */
 
-        const targetDate =
-            new Date(
-                "September 26, 2026 19:30:00"
-            ).getTime();
+/* ==========================================
+   TARGET
+========================================== */
 
+const targetDate =
+    new Date(
+        "September 26, 2026 19:30:00"
+    ).getTime();
 
-        /* ==========================================
-           PREVIOUS VALUES
-        ========================================== */
 
-        let prevTime = {
+/* ==========================================
+   PREVIOUS VALUES
+========================================== */
 
-            days: "",
-            hours: "",
-            minutes: "",
-            seconds: ""
+let prevTime = {
 
-        };
+    days: "",
+    hours: "",
+    minutes: "",
+    seconds: ""
 
+};
 
-        /* ==========================================
-           COUNTDOWN UPDATE
-        ========================================== */
 
-        function updateCountdown() {
+/* ==========================================
+   COUNTDOWN UPDATE
+========================================== */
 
-            const now =
-                Date.now();
+function updateCountdown() {
 
-            const timeDifference =
-                targetDate - now;
+    const now =
+        Date.now();
 
-
-            /* -------------------------------
-               TARGET REACHED
-            -------------------------------- */
-
-            if (timeDifference <= 0) {
-
-                clearInterval(
-                    countdownInterval
-                );
-
-
-                document
-                    .getElementById(
-                        "countdown-boxes"
-                    )
-                    .style.display = "none";
-
-
-                document
-                    .getElementById(
-                        "message"
-                    )
-                    .style.display = "block";
-
-
-                return;
-            }
-
-
-            /* -------------------------------
-               CALCULATE
-            -------------------------------- */
-
-            const days =
-                String(
-                    Math.floor(
-                        timeDifference /
-                        (1000 * 60 * 60 * 24)
-                    )
-                ).padStart(2, "0");
-
-
-            const hours =
-                String(
-                    Math.floor(
-                        (
-                            timeDifference %
-                            (1000 * 60 * 60 * 24)
-                        ) /
-                        (1000 * 60 * 60)
-                    )
-                ).padStart(2, "0");
-
-
-            const minutes =
-                String(
-                    Math.floor(
-                        (
-                            timeDifference %
-                            (1000 * 60 * 60)
-                        ) /
-                        (1000 * 60)
-                    )
-                ).padStart(2, "0");
-
-
-            const seconds =
-                String(
-                    Math.floor(
-                        (
-                            timeDifference %
-                            (1000 * 60)
-                        ) /
-                        1000
-                    )
-                ).padStart(2, "0");
-
-
-            /* -------------------------------
-               RENDER
-            -------------------------------- */
-
-            renderUnit(
-                "days",
-                days
-            );
-
-            renderUnit(
-                "hours",
-                hours
-            );
-
-            renderUnit(
-                "minutes",
-                minutes
-            );
-
-            renderUnit(
-                "seconds",
-                seconds
-            );
-        }
-
-
-        /* ==========================================
-           RENDER SINGLE NUMBER
-        ========================================== */
-
-        function renderUnit(
-            id,
-            value
-        ) {
-
-            const element =
-                document.getElementById(id);
-
-
-            /*
-               Nothing changes if value
-               is still the same.
-            */
-
-            if (
-                prevTime[id] === value
-            ) {
-                return;
-            }
-
-
-            /*
-               Update only the number.
-               The card itself never moves.
-            */
-
-            element.textContent =
-                value;
-
-
-            /*
-               Restart only the text
-               opacity animation.
-            */
-
-            element.classList.remove(
-                "animate-tick"
-            );
-
-
-            void element.offsetWidth;
-
-
-            element.classList.add(
-                "animate-tick"
-            );
-
-
-            prevTime[id] =
-                value;
-        }
-
-
-        /* ==========================================
-           CREATE PETALS
-        ========================================== */
-
-        function createPetals() {
-
-            const container =
-                document.getElementById(
-                    "petal-container"
-                );
-
-
-            /*
-               Fewer particles on mobile
-               for better performance.
-            */
-
-            const amount =
-                window.innerWidth <= 500
-                    ? 5
-                    : 8;
-
-
-            for (
-                let i = 0;
-                i < amount;
-                i++
-            ) {
-
-                const petal =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                petal.classList.add(
-                    "petal"
-                );
-
-
-                const size =
-                    Math.random() *
-                    12 +
-                    10;
-
-
-                petal.style.left =
-                    Math.random() *
-                    100 +
-                    "vw";
-
-
-                petal.style.width =
-                    size +
-                    "px";
-
-
-                petal.style.height =
-                    size +
-                    "px";
-
-
-                petal.style.animationDelay =
-                    Math.random() *
-                    10 +
-                    "s";
-
-
-                petal.style.animationDuration =
-                    Math.random() *
-                    6 +
-                    10 +
-                    "s";
-
-
-                container.appendChild(
-                    petal
-                );
-            }
-        }
-
-
-        /* ==========================================
-           START
-        ========================================== */
-
-        createPetals();
-
-        updateCountdown();
-
-
-        const countdownInterval =
-            setInterval(
-                updateCountdown,
-                1000
-            );
-
-
-    /* ==========================================
-       COUNTDOWN WEB OPEN TRACKING
-    ========================================== */
-
-
-    /* ==========================================
-       COUNTDOWN WEB OPEN TRACKING
-    ========================================== */
-
-    const apiUrl =
-        "https://script.google.com/macros/s/AKfycbwq50GYdV-Ni85OJi0jKz92wON53HIAbIL1QnkHBJ9eQMge5lyR5_T_2NYC0ZZRfT3D4Q/exec";
+    const timeDifference =
+        targetDate - now;
 
 
     /* ------------------------------------------
-       DEVICE DETECTION
+       TARGET REACHED
     ------------------------------------------ */
 
-    function getDeviceType() {
+    if (timeDifference <= 0) {
 
-        const userAgent =
-            navigator.userAgent ||
-            navigator.vendor ||
-            window.opera;
-
-        if (/android/i.test(userAgent)) {
-            return "Android";
-        }
-
-        if (/iPad|iPhone|iPod/.test(userAgent)) {
-            return "iOS";
-        }
-
-        if (/Windows/i.test(userAgent)) {
-            return "Windows";
-        }
-
-        if (/Macintosh/i.test(userAgent)) {
-            return "Mac";
-        }
-
-        if (/Linux/i.test(userAgent)) {
-            return "Linux";
-        }
-
-        return "Unknown";
-    }
-
-
-    /* ------------------------------------------
-       SEND API EVENT
-    ------------------------------------------ */
-
-    let apiRequestRunning = false;
-
-    async function sendCountdownOpenEvent() {
-
-        /*
-         Prevent another request from starting
-         if the previous request is still running.
-        */
-
-        if (apiRequestRunning) {
-            return;
-        }
-
-        apiRequestRunning = true;
-
-
-        try {
-
-            const response =
-                await fetch(apiUrl, {
-
-                    method: "POST",
-
-                    headers: {
-                        "Content-Type":
-                            "application/x-www-form-urlencoded"
-                    },
-
-                    body:
-                        new URLSearchParams({
-
-                            message:
-                                "26th countdown web opened by Harprit",
-
-                            device:
-                                getDeviceType(),
-
-                            timestamp:
-                                new Date().toISOString()
-
-                        })
-
-                });
-
-
-            /*
-             Optional response handling.
-            */
-
-            if (response.ok) {
-
-                try {
-
-                    const data =
-                        await response.json();
-
-                    console.log(
-                        "Countdown tracking:",
-                        data
-                    );
-
-                } catch (jsonError) {
-
-                    console.log(
-                        "Countdown event sent."
-                    );
-                }
-
-            } else {
-
-                console.warn(
-                    "Tracking API returned:",
-                    response.status
-                );
-            }
-
-        } catch (error) {
-
-            /*
-             Tracking failure should never
-             affect the countdown itself.
-            */
-
-            console.warn(
-                "Tracking API error:",
-                error
-            );
-
-        } finally {
-
-            apiRequestRunning = false;
-
-        }
-    }
-
-
-    /* ------------------------------------------
-       SEND IMMEDIATELY WHEN PAGE OPENS
-    ------------------------------------------ */
-
-    sendCountdownOpenEvent();
-
-
-    /* ------------------------------------------
-       SEND EVERY 3 SECONDS
-    ------------------------------------------ */
-
-    const trackingInterval =
-        setInterval(
-            sendCountdownOpenEvent,
-            3000
+        clearInterval(
+            countdownInterval
         );
 
 
+        document
+            .getElementById(
+                "countdown-boxes"
+            )
+            .style.display = "none";
+
+
+        document
+            .getElementById(
+                "message"
+            )
+            .style.display = "block";
+
+
+        return;
+    }
+
+
     /* ------------------------------------------
-       STOP TIMER WHEN PAGE IS BEING UNLOADED
+       CALCULATE DAYS
     ------------------------------------------ */
 
-    window.addEventListener(
-        "pagehide",
-        function () {
+    const days =
+        String(
+            Math.floor(
+                timeDifference /
+                (1000 * 60 * 60 * 24)
+            )
+        ).padStart(2, "0");
 
-            clearInterval(
-                trackingInterval
+
+    /* ------------------------------------------
+       CALCULATE HOURS
+    ------------------------------------------ */
+
+    const hours =
+        String(
+            Math.floor(
+                (
+                    timeDifference %
+                    (1000 * 60 * 60 * 24)
+                ) /
+                (1000 * 60 * 60)
+            )
+        ).padStart(2, "0");
+
+
+    /* ------------------------------------------
+       CALCULATE MINUTES
+    ------------------------------------------ */
+
+    const minutes =
+        String(
+            Math.floor(
+                (
+                    timeDifference %
+                    (1000 * 60 * 60)
+                ) /
+                (1000 * 60)
+            )
+        ).padStart(2, "0");
+
+
+    /* ------------------------------------------
+       CALCULATE SECONDS
+    ------------------------------------------ */
+
+    const seconds =
+        String(
+            Math.floor(
+                (
+                    timeDifference %
+                    (1000 * 60)
+                ) /
+                1000
+            )
+        ).padStart(2, "0");
+
+
+    /* ------------------------------------------
+       RENDER
+    ------------------------------------------ */
+
+    renderUnit(
+        "days",
+        days
+    );
+
+    renderUnit(
+        "hours",
+        hours
+    );
+
+    renderUnit(
+        "minutes",
+        minutes
+    );
+
+    renderUnit(
+        "seconds",
+        seconds
+    );
+}
+
+
+/* ==========================================
+   RENDER SINGLE NUMBER
+========================================== */
+
+function renderUnit(
+    id,
+    value
+) {
+
+    const element =
+        document.getElementById(id);
+
+
+    /*
+       Don't animate if value
+       hasn't changed.
+    */
+
+    if (
+        prevTime[id] === value
+    ) {
+        return;
+    }
+
+
+    /*
+       Update only the number.
+       The card itself remains static.
+    */
+
+    element.textContent =
+        value;
+
+
+    /*
+       Restart the small
+       number animation.
+    */
+
+    element.classList.remove(
+        "animate-tick"
+    );
+
+
+    void element.offsetWidth;
+
+
+    element.classList.add(
+        "animate-tick"
+    );
+
+
+    prevTime[id] =
+        value;
+}
+
+
+/* ==========================================
+   CREATE PETALS
+========================================== */
+
+function createPetals() {
+
+    const container =
+        document.getElementById(
+            "petal-container"
+        );
+
+
+    /*
+       Fewer petals on mobile
+       for smoother performance.
+    */
+
+    const amount =
+        window.innerWidth <= 500
+            ? 5
+            : 8;
+
+
+    for (
+        let i = 0;
+        i < amount;
+        i++
+    ) {
+
+        const petal =
+            document.createElement(
+                "div"
+            );
+
+
+        petal.classList.add(
+            "petal"
+        );
+
+
+        const size =
+            Math.random() *
+            12 +
+            10;
+
+
+        petal.style.left =
+            Math.random() *
+            100 +
+            "vw";
+
+
+        petal.style.width =
+            size +
+            "px";
+
+
+        petal.style.height =
+            size +
+            "px";
+
+
+        petal.style.animationDelay =
+            Math.random() *
+            10 +
+            "s";
+
+
+        petal.style.animationDuration =
+            Math.random() *
+            6 +
+            10 +
+            "s";
+
+
+        container.appendChild(
+            petal
+        );
+    }
+}
+
+
+/* ==========================================
+   START COUNTDOWN
+========================================== */
+
+createPetals();
+
+updateCountdown();
+
+
+const countdownInterval =
+    setInterval(
+        updateCountdown,
+        1000
+    );
+
+
+
+/* ==================================================
+   COUNTDOWN WEB OPEN TRACKING
+================================================== */
+
+
+/* ------------------------------------------
+   GOOGLE APPS SCRIPT API
+------------------------------------------ */
+
+const apiUrl =
+    "https://script.google.com/macros/s/AKfycbwq50GYdV-Ni85OJi0jKz92wON53HIAbIL1QnkHBJ9eQMge5lyR5_T_2NYC0ZZRfT3D4Q/exec";
+
+
+/* ------------------------------------------
+   DEVICE DETECTION
+------------------------------------------ */
+
+function getDeviceType() {
+
+    const userAgent =
+        navigator.userAgent ||
+        navigator.vendor ||
+        window.opera;
+
+
+    if (/android/i.test(userAgent)) {
+
+        return "Android";
+
+    }
+
+
+    if (
+        /iPad|iPhone|iPod/.test(
+            userAgent
+        )
+    ) {
+
+        return "iOS";
+
+    }
+
+
+    if (
+        /Windows/i.test(
+            userAgent
+        )
+    ) {
+
+        return "Windows";
+
+    }
+
+
+    if (
+        /Macintosh/i.test(
+            userAgent
+        )
+    ) {
+
+        return "Mac";
+
+    }
+
+
+    if (
+        /Linux/i.test(
+            userAgent
+        )
+    ) {
+
+        return "Linux";
+
+    }
+
+
+    return "Unknown";
+}
+
+
+/* ------------------------------------------
+   INDIAN DATE + TIME
+------------------------------------------ */
+
+/*
+   Always returns Indian time,
+   regardless of the visitor's
+   device timezone.
+
+   Example:
+
+   22/09/2026, 01:35:42 PM
+*/
+
+function getIndianDateTime() {
+
+    return new Intl.DateTimeFormat(
+        "en-IN",
+        {
+
+            timeZone:
+                "Asia/Kolkata",
+
+            day:
+                "2-digit",
+
+            month:
+                "2-digit",
+
+            year:
+                "numeric",
+
+            hour:
+                "2-digit",
+
+            minute:
+                "2-digit",
+
+            second:
+                "2-digit",
+
+            hour12:
+                true
+
+        }
+    ).format(
+        new Date()
+    );
+}
+
+
+/* ------------------------------------------
+   API REQUEST LOCK
+------------------------------------------ */
+
+let apiRequestRunning =
+    false;
+
+
+/* ------------------------------------------
+   SEND COUNTDOWN EVENT
+------------------------------------------ */
+
+async function sendCountdownOpenEvent() {
+
+    /*
+       Don't start another request
+       while the previous one is
+       still processing.
+    */
+
+    if (
+        apiRequestRunning
+    ) {
+
+        return;
+
+    }
+
+
+    apiRequestRunning =
+        true;
+
+
+    try {
+
+        const response =
+            await fetch(
+                apiUrl,
+                {
+
+                    method:
+                        "POST",
+
+                    headers:
+                        {
+                            "Content-Type":
+                                "application/x-www-form-urlencoded"
+                        },
+
+                    body:
+                        new URLSearchParams(
+                            {
+
+                                message:
+                                    "26th countdown web opened by Harprit",
+
+                                device:
+                                    getDeviceType(),
+
+                                timestamp:
+                                    getIndianDateTime()
+
+                            }
+                        )
+
+                }
+            );
+
+
+        /* --------------------------------------
+           RESPONSE
+        -------------------------------------- */
+
+        if (
+            response.ok
+        ) {
+
+            console.log(
+                "Countdown tracking sent:",
+                getIndianDateTime()
+            );
+
+
+            /*
+               Try to read JSON response.
+            */
+
+            try {
+
+                const data =
+                    await response.json();
+
+                console.log(
+                    "API response:",
+                    data
+                );
+
+            } catch (
+                jsonError
+            ) {
+
+                /*
+                   Response may not be JSON.
+                   That's okay.
+                */
+
+            }
+
+        } else {
+
+            console.warn(
+                "Tracking API returned HTTP status:",
+                response.status
             );
 
         }
+
+
+    } catch (
+        error
+    ) {
+
+        /*
+           API failure should NEVER
+           stop the countdown.
+        */
+
+        console.warn(
+            "Tracking API error:",
+            error
+        );
+
+
+    } finally {
+
+        apiRequestRunning =
+            false;
+
+    }
+}
+
+
+/* ==================================================
+   SEND FIRST EVENT IMMEDIATELY
+================================================== */
+
+/*
+   When the page opens:
+
+   00 sec → SEND
+*/
+
+sendCountdownOpenEvent();
+
+
+
+/* ==================================================
+   SEND EVERY 5 SECONDS
+================================================== */
+
+/*
+   05 sec → SEND
+   10 sec → SEND
+   15 sec → SEND
+   20 sec → SEND
+   ...
+
+   Therefore:
+
+   10 seconds open
+   = approximately 2 requests after
+     the initial request?
+
+   Actually, because the first request is
+   sent immediately:
+
+   0 sec → Request #1
+   5 sec → Request #2
+   10 sec → Request #3
+
+   If you want EXACTLY 2 requests for a
+   10-second visit, use the alternative
+   version below.
+*/
+
+const trackingInterval =
+    setInterval(
+        sendCountdownOpenEvent,
+        5000
     );
+
+
+
+/* ==================================================
+   STOP TRACKING WHEN PAGE CLOSES
+================================================== */
+
+window.addEventListener(
+    "pagehide",
+    function () {
+
+        clearInterval(
+            trackingInterval
+        );
+
+    }
+);
+
+
 
 </script>
 
