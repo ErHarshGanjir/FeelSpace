@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Counting the Moments</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background: radial-gradient(circle at center, #231215 0%, #0f0709 100%);
+            color: #f7fafc;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Soft romantic glowing background atmosphere */
+        body::before {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(226, 92, 114, 0.15) 0%, transparent 70%);
+            border-radius: 50%;
+            filter: blur(40px);
+            animation: pulseGlow 10s infinite ease-in-out;
+            z-index: 0;
+        }
+
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 0.6; }
+            50% { transform: scale(1.3); opacity: 0.9; }
+        }
+
+        /* Floating background elements to represent curiosity and anticipation */
+        .petal {
+            position: absolute;
+            background: linear-gradient(135deg, #e25c72, #b83b5e);
+            border-radius: 150px 0px 150px 150px;
+            opacity: 0.3;
+            pointer-events: none;
+            z-index: 0;
+            animation: floatAway 12s infinite linear;
+        }
+
+        @keyframes floatAway {
+            0% { transform: translateY(100vh) translateX(0) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.4; }
+            90% { opacity: 0.4; }
+            100% { transform: translateY(-10vh) translateX(100px) rotate(360deg); opacity: 0; }
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+            z-index: 1;
+        }
+
+        .intent-badge {
+            display: inline-block;
+            background: rgba(226, 92, 114, 0.08);
+            border: 1px solid rgba(226, 92, 114, 0.25);
+            color: #f687b3;
+            padding: 6px 16px;
+            border-radius: 30px;
+            font-size: 0.8rem;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 2.4rem;
+            margin-bottom: 12px;
+            font-weight: 500;
+            letter-spacing: -0.5px;
+            font-family: Georgia, serif;
+            background: linear-gradient(90deg, #f6ad55, #f687b3);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 1.05rem;
+            color: #cbd5e0;
+            margin-bottom: 45px;
+            line-height: 1.6;
+            font-weight: 300;
+        }
+
+        .countdown-display {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .time-box {
+            background: rgba(35, 20, 24, 0.4);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(226, 92, 114, 0.15);
+            padding: 22px 10px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            position: relative;
+        }
+
+        .number {
+            font-size: 3.2rem;
+            font-weight: 400;
+            color: #fff;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1;
+            margin-bottom: 8px;
+            font-variant-numeric: tabular-nums;
+        }
+
+        /* Elegant flip/fade scale animation whenever time increments */
+        .animate-tick {
+            animation: pulseActive 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        @keyframes pulseActive {
+            0% { transform: scale(0.92); opacity: 0.6; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #a0aec0;
+        }
+
+        /* Core Philosophy Anchors with Alternative Words */
+        .pillars {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+            padding-top: 30px;
+        }
+
+        .pillar-item {
+            font-size: 0.85rem;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+            color: #a0aec0;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .pillar-item span {
+            color: #e25c72;
+        }
+
+        #message {
+            font-size: 2.2rem;
+            font-family: Georgia, serif;
+            color: #f687b3;
+            display: none;
+            margin-top: 20px;
+            text-shadow: 0 0 15px rgba(246, 135, 179, 0.3);
+        }
+
+        @media (max-width: 500px) {
+            h1 { font-size: 1.8rem; }
+            .subtitle { font-size: 0.95rem; margin-bottom: 30px; }
+            .number { font-size: 2.2rem; }
+            .label { font-size: 0.65rem; letter-spacing: 1px; }
+            .countdown-display { gap: 8px; }
+            .pillars { gap: 12px; }
+            .pillar-item { font-size: 0.75rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dynamic Petal Generation Container -->
+    <div id="petal-container"></div>
+
+    <div class="container">
+        <div class="intent-badge">A Special Awaited Moment</div>
+        <h1>Counting the Moments Until We Meet</h1>
+        <p class="subtitle">Savouring the passing time with shared anticipation.</p>
+
+        <div class="countdown-display" id="countdown-boxes">
+            <div class="time-box">
+                <div class="number" id="days">00</div>
+                <div class="label">Days</div>
+            </div>
+            <div class="time-box">
+                <div class="number" id="hours">00</div>
+                <div class="label">Hours</div>
+            </div>
+            <div class="time-box">
+                <div class="number" id="minutes">00</div>
+                <div class="label">Mins</div>
+            </div>
+            <div class="time-box">
+                <div class="number" id="seconds">00</div>
+                <div class="label">Secs</div>
+            </div>
+        </div>
+
+        <div id="message">The beautiful moment has arrived. ✨</div>
+
+        <div class="pillars">
+            <div class="pillar-item"><span>♥</span> Devotion</div>
+            <div class="pillar-item"><span>✦</span> Admiration</div>
+            <div class="pillar-item"><span>👁</span> Curiosity</div>
+        </div>
+    </div>
+
+    <script>
+        // Target Setup: 26 Sept 2026, 7:30 PM
+        const targetDate = new Date("September 26, 2026 19:30:00").getTime();
+        let prevTime = { days: "", hours: "", minutes: "", seconds: "" };
+
+        function updateCountdown() {
+            const now = new Date().getTime();
+            const timeDifference = targetDate - now;
+
+            if (timeDifference <= 0) {
+                clearInterval(countdownInterval);
+                document.getElementById("countdown-boxes").style.display = "none";
+                document.getElementById("message").style.display = "block";
+                return;
+            }
+
+            const days = String(Math.floor(timeDifference / (1000 * 60 * 60 * 24))).padStart(2, '0');
+            const hours = String(Math.floor((timeDifference % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))).padStart(2, '0');
+            const minutes = String(Math.floor((timeDifference % (1000 * 60 * 60)) / (1000 * 60))).padStart(2, '0');
+            const seconds = String(Math.floor((timeDifference % (1000 * 60)) / 1000)).padStart(2, '0');
+
+            renderUnit("days", days);
+            renderUnit("hours", hours);
+            renderUnit("minutes", minutes);
+            renderUnit("seconds", seconds);
+        }
+
+        function renderUnit(id, value) {
+            const element = document.getElementById(id);
+            if (prevTime[id] !== value) {
+                element.innerText = value;
+                element.classList.remove("animate-tick");
+                void element.offsetWidth; // Force reflow to re-trigger smooth scaling animation
+                element.classList.add("animate-tick");
+                prevTime[id] = value;
+            }
+        }
+
+        // Generate slow-moving, falling background accents
+        function createPetals() {
+            const container = document.getElementById('petal-container');
+            for (let i = 0; i < 8; i++) {
+                const petal = document.createElement('div');
+                petal.classList.add('petal');
+                petal.style.left = Math.random() * 100 + 'vw';
+                petal.style.width = Math.random() * 15 + 10 + 'px';
+                petal.style.height = petal.style.width;
+                petal.style.animationDelay = Math.random() * 10 + 's';
+                petal.style.animationDuration = Math.random() * 6 + 10 + 's';
+                container.appendChild(petal);
+            }
+        }
+
+        createPetals();
+        updateCountdown();
+        const countdownInterval = setInterval(updateCountdown, 1000);
+    </script>
+
+</body>
+</html>
