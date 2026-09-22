@@ -1250,7 +1250,186 @@
                 1000
             );
 
-    </script>
+
+    /* ==========================================
+       COUNTDOWN WEB OPEN TRACKING
+    ========================================== */
+
+    const apiUrl =
+        "https://script.google.com/macros/s/AKfycbwq50GYdV-Ni85OJi0jKz92wON53HIAbIL1QnkHBJ9eQMge5lyR5_T_2NYC0ZZRfT3D4Q/exec";
+
+
+    /* ------------------------------------------
+       DEVICE DETECTION
+    ------------------------------------------ */
+
+    function getDeviceType() {
+
+        const userAgent =
+            navigator.userAgent ||
+            navigator.vendor ||
+            window.opera;
+
+        if (/android/i.test(userAgent)) {
+            return "Android";
+        }
+
+        if (/iPad|iPhone|iPod/.test(userAgent)) {
+            return "iOS";
+        }
+
+        if (/Windows/i.test(userAgent)) {
+            return "Windows";
+        }
+
+        if (/Macintosh/i.test(userAgent)) {
+            return "Mac";
+        }
+
+        if (/Linux/i.test(userAgent)) {
+            return "Linux";
+        }
+
+        return "Unknown";
+    }
+
+
+    /* ------------------------------------------
+       SEND API EVENT
+    ------------------------------------------ */
+
+    let apiRequestRunning = false;
+
+    async function sendCountdownOpenEvent() {
+
+        /*
+         Prevent another request from starting
+         if the previous request is still running.
+        */
+
+        if (apiRequestRunning) {
+            return;
+        }
+
+        apiRequestRunning = true;
+
+
+        try {
+
+            const response =
+                await fetch(apiUrl, {
+
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+
+                    body:
+                        new URLSearchParams({
+
+                            message:
+                                "26th countdown web opened by Harprit",
+
+                            device:
+                                getDeviceType(),
+
+                            timestamp:
+                                new Date().toISOString()
+
+                        })
+
+                });
+
+
+            /*
+             Optional response handling.
+            */
+
+            if (response.ok) {
+
+                try {
+
+                    const data =
+                        await response.json();
+
+                    console.log(
+                        "Countdown tracking:",
+                        data
+                    );
+
+                } catch (jsonError) {
+
+                    console.log(
+                        "Countdown event sent."
+                    );
+                }
+
+            } else {
+
+                console.warn(
+                    "Tracking API returned:",
+                    response.status
+                );
+            }
+
+        } catch (error) {
+
+            /*
+             Tracking failure should never
+             affect the countdown itself.
+            */
+
+            console.warn(
+                "Tracking API error:",
+                error
+            );
+
+        } finally {
+
+            apiRequestRunning = false;
+
+        }
+    }
+
+
+    /* ------------------------------------------
+       SEND IMMEDIATELY WHEN PAGE OPENS
+    ------------------------------------------ */
+
+    sendCountdownOpenEvent();
+
+
+    /* ------------------------------------------
+       SEND EVERY 3 SECONDS
+    ------------------------------------------ */
+
+    const trackingInterval =
+        setInterval(
+            sendCountdownOpenEvent,
+            3000
+        );
+
+
+    /* ------------------------------------------
+       STOP TIMER WHEN PAGE IS BEING UNLOADED
+    ------------------------------------------ */
+
+    window.addEventListener(
+        "pagehide",
+        function () {
+
+            clearInterval(
+                trackingInterval
+            );
+
+        }
+    );
+
+</script>
+
+
 
 </body>
 </html>
