@@ -1255,6 +1255,11 @@
        COUNTDOWN WEB OPEN TRACKING
     ========================================== */
 
+
+    /* ==========================================
+       COUNTDOWN WEB OPEN TRACKING
+    ========================================== */
+
     const apiUrl =
         "https://script.google.com/macros/s/AKfycbwq50GYdV-Ni85OJi0jKz92wON53HIAbIL1QnkHBJ9eQMge5lyR5_T_2NYC0ZZRfT3D4Q/exec";
 
@@ -1298,110 +1303,100 @@
        SEND API EVENT
     ------------------------------------------ */
 
+    let apiRequestRunning = false;
 
+    async function sendCountdownOpenEvent() {
 
+        /*
+         Prevent another request from starting
+         if the previous request is still running.
+        */
 
-function getIndianDateTime() {
-
-    return new Intl.DateTimeFormat("en-IN", {
-
-        timeZone: "Asia/Kolkata",
-
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-
-        hour: "2-digit",
-        minute: "2-digit",
-        second: "2-digit",
-
-        hour12: true
-
-    }).format(new Date());
-}
-
-
-let apiRequestRunning = false;
-
-
-async function sendCountdownOpenEvent() {
-
-    if (apiRequestRunning) {
-        return;
-    }
-
-    apiRequestRunning = true;
-
-    try {
-
-        const response = await fetch(apiUrl, {
-
-            method: "POST",
-
-            headers: {
-                "Content-Type":
-                    "application/x-www-form-urlencoded"
-            },
-
-            body: new URLSearchParams({
-
-                message:
-                    "26th countdown web opened by Harprit",
-
-                device:
-                    "Mobile-App",
-
-                timestamp:
-                    getIndianDateTime()
-
-            })
-
-        });
-
-
-        if (response.ok) {
-
-            console.log(
-                "API sent:",
-                getIndianDateTime()
-            );
-
+        if (apiRequestRunning) {
+            return;
         }
 
-    } catch (error) {
+        apiRequestRunning = true;
 
-        console.warn(
-            "API error:",
-            error
-        );
 
-    } finally {
+        try {
 
-        apiRequestRunning = false;
+            const response =
+                await fetch(apiUrl, {
 
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+
+                    body:
+                        new URLSearchParams({
+
+                            message:
+                                "26th countdown web opened by Harprit",
+
+                            device:
+                                getDeviceType(),
+
+                            timestamp:
+                                new Date().toISOString()
+
+                        })
+
+                });
+
+
+            /*
+             Optional response handling.
+            */
+
+            if (response.ok) {
+
+                try {
+
+                    const data =
+                        await response.json();
+
+                    console.log(
+                        "Countdown tracking:",
+                        data
+                    );
+
+                } catch (jsonError) {
+
+                    console.log(
+                        "Countdown event sent."
+                    );
+                }
+
+            } else {
+
+                console.warn(
+                    "Tracking API returned:",
+                    response.status
+                );
+            }
+
+        } catch (error) {
+
+            /*
+             Tracking failure should never
+             affect the countdown itself.
+            */
+
+            console.warn(
+                "Tracking API error:",
+                error
+            );
+
+        } finally {
+
+            apiRequestRunning = false;
+
+        }
     }
-}
-
-
-/* Send immediately */
-sendCountdownOpenEvent();
-
-
-/* Then every 3 seconds */
-const trackingInterval =
-    setInterval(
-        sendCountdownOpenEvent,
-        3000
-    );
-
-
-/* Stop when page leaves */
-window.addEventListener(
-    "pagehide",
-    () => {
-        clearInterval(trackingInterval);
-    }
-);
 
 
     /* ------------------------------------------
@@ -1418,7 +1413,7 @@ window.addEventListener(
     const trackingInterval =
         setInterval(
             sendCountdownOpenEvent,
-            4000
+            3000
         );
 
 
@@ -1438,6 +1433,8 @@ window.addEventListener(
     );
 
 </script>
+
+
 
 
 
