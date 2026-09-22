@@ -2,979 +2,1255 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-
-<title>Counting the Moments</title>
-
-<style>
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-:root {
-    --bg: #08090d;
-    --card: rgba(255,255,255,0.045);
-    --border: rgba(255,255,255,0.09);
-    --text: #f5f5f7;
-    --muted: #8f939f;
-    --accent: #ff6b8a;
-    --accent2: #a78bfa;
-    --glow: rgba(255,107,138,0.16);
-}
-
-html,
-body {
-    width: 100%;
-    min-height: 100%;
-}
-
-body {
-    font-family:
-        -apple-system,
-        BlinkMacSystemFont,
-        "Segoe UI",
-        Roboto,
-        Helvetica,
-        Arial,
-        sans-serif;
-
-    background:
-        radial-gradient(
-            circle at 50% 20%,
-            rgba(167,139,250,0.09),
-            transparent 32%
-        ),
-        radial-gradient(
-            circle at 20% 80%,
-            rgba(255,107,138,0.08),
-            transparent 30%
-        ),
-        var(--bg);
-
-    color: var(--text);
-
-    min-height: 100svh;
-
-    display: flex;
-    justify-content: center;
-    align-items: center;
-
-    padding:
-        max(22px, env(safe-area-inset-top))
-        18px
-        max(22px, env(safe-area-inset-bottom));
-
-    overflow: hidden;
-
-    position: relative;
-}
-
-/* --------------------------------
-   BACKGROUND ATMOSPHERE
--------------------------------- */
-
-.background-glow {
-    position: absolute;
+    <meta charset="UTF-8">
 
-    width: 70vw;
-    height: 70vw;
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    >
 
-    max-width: 500px;
-    max-height: 500px;
+    <title>Counting the Moments</title>
 
-    border-radius: 50%;
+    <style>
 
-    background:
-        radial-gradient(
-            circle,
-            var(--glow),
-            transparent 70%
-        );
+        /* ================================
+           RESET
+        ================================= */
 
-    filter: blur(35px);
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-    animation: breathe 8s ease-in-out infinite;
 
-    pointer-events: none;
-}
+        /* ================================
+           BODY
+        ================================= */
 
-@keyframes breathe {
-    0%,100% {
-        transform: scale(0.95);
-        opacity: .55;
-    }
+        body {
 
-    50% {
-        transform: scale(1.08);
-        opacity: .9;
-    }
-}
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Roboto,
+                Helvetica,
+                Arial,
+                sans-serif;
 
-/* Small floating particles */
+            background:
+                radial-gradient(
+                    circle at center,
+                    #231215 0%,
+                    #0f0709 100%
+                );
 
-.particle {
-    position: absolute;
+            color: #f7fafc;
 
-    width: 3px;
-    height: 3px;
+            min-height: 100vh;
+            min-height: 100svh;
 
-    border-radius: 50%;
+            display: flex;
 
-    background: rgba(255,255,255,.35);
+            justify-content: center;
+            align-items: center;
 
-    animation:
-        particleFloat
-        linear infinite;
+            padding:
+                max(20px, env(safe-area-inset-top))
+                max(16px, env(safe-area-inset-right))
+                max(20px, env(safe-area-inset-bottom))
+                max(16px, env(safe-area-inset-left));
 
-    pointer-events: none;
-}
+            overflow: hidden;
 
-@keyframes particleFloat {
+            position: relative;
+        }
 
-    0% {
-        transform:
-            translateY(110vh)
-            translateX(0)
-            scale(.5);
 
-        opacity: 0;
-    }
+        /* ================================
+           SOFT BACKGROUND GLOW
+        ================================= */
 
-    15% {
-        opacity: .5;
-    }
+        body::before {
 
-    85% {
-        opacity: .5;
-    }
+            content: "";
 
-    100% {
-        transform:
-            translateY(-10vh)
-            translateX(60px)
-            scale(1);
+            position: absolute;
 
-        opacity: 0;
-    }
-}
+            width: min(400px, 90vw);
+            height: min(400px, 90vw);
 
-/* --------------------------------
-   MAIN
--------------------------------- */
+            left: 50%;
+            top: 50%;
 
-.container {
+            transform:
+                translate(-50%, -50%);
 
-    width: 100%;
-    max-width: 540px;
+            background:
+                radial-gradient(
+                    circle,
+                    rgba(226, 92, 114, 0.15) 0%,
+                    transparent 70%
+                );
 
-    text-align: center;
+            border-radius: 50%;
 
-    position: relative;
+            filter: blur(40px);
 
-    z-index: 2;
-}
+            animation:
+                pulseGlow 10s
+                infinite ease-in-out;
 
-/* --------------------------------
-   TOP LABEL
--------------------------------- */
+            z-index: 0;
 
-.eyebrow {
+            pointer-events: none;
+        }
 
-    display: inline-flex;
 
-    align-items: center;
-    gap: 8px;
+        @keyframes pulseGlow {
 
-    padding: 7px 13px;
+            0%,
+            100% {
+                transform:
+                    translate(-50%, -50%)
+                    scale(1);
 
-    border: 1px solid var(--border);
+                opacity: .6;
+            }
 
-    background: rgba(255,255,255,.035);
+            50% {
+                transform:
+                    translate(-50%, -50%)
+                    scale(1.3);
 
-    border-radius: 999px;
+                opacity: .9;
+            }
+        }
 
-    color: #b5b8c2;
 
-    font-size: 10px;
+        /* ================================
+           PETALS
+        ================================= */
 
-    font-weight: 600;
+        #petal-container {
 
-    letter-spacing: 2.2px;
+            position: absolute;
 
-    text-transform: uppercase;
+            inset: 0;
 
-    margin-bottom: 22px;
+            overflow: hidden;
 
-    backdrop-filter: blur(12px);
-}
+            pointer-events: none;
 
-.eyebrow-dot {
+            z-index: 0;
+        }
 
-    width: 6px;
-    height: 6px;
 
-    border-radius: 50%;
+        .petal {
 
-    background: var(--accent);
+            position: absolute;
 
-    box-shadow:
-        0 0 10px var(--accent);
+            background:
+                linear-gradient(
+                    135deg,
+                    #e25c72,
+                    #b83b5e
+                );
 
-    animation: dotPulse 2s infinite;
-}
+            border-radius:
+                150px 0 150px 150px;
 
-@keyframes dotPulse {
+            opacity: .3;
 
-    0%,100% {
-        opacity: .5;
-        transform: scale(.8);
-    }
+            pointer-events: none;
 
-    50% {
-        opacity: 1;
-        transform: scale(1.15);
-    }
-}
+            animation:
+                floatAway 12s
+                infinite linear;
+        }
 
-/* --------------------------------
-   TITLE
--------------------------------- */
 
-h1 {
+        @keyframes floatAway {
 
-    font-family:
-        Georgia,
-        "Times New Roman",
-        serif;
+            0% {
 
-    font-size:
-        clamp(2rem, 8vw, 3.2rem);
+                transform:
+                    translate3d(0, 100vh, 0)
+                    rotate(0deg);
 
-    line-height: 1.08;
+                opacity: 0;
+            }
 
-    font-weight: 400;
+            10% {
+                opacity: .4;
+            }
 
-    letter-spacing: -1px;
+            90% {
+                opacity: .4;
+            }
 
-    margin-bottom: 14px;
+            100% {
 
-    background:
-        linear-gradient(
-            120deg,
-            #ffffff 10%,
-            #ffb4c5 50%,
-            #c7b8ff 90%
-        );
+                transform:
+                    translate3d(100px, -10vh, 0)
+                    rotate(360deg);
 
-    -webkit-background-clip: text;
-    background-clip: text;
+                opacity: 0;
+            }
+        }
 
-    -webkit-text-fill-color: transparent;
-}
 
-.subtitle {
+        /* ================================
+           MAIN CONTAINER
+        ================================= */
 
-    max-width: 410px;
+        .container {
 
-    margin: auto;
+            max-width: 600px;
 
-    color: var(--muted);
+            width: 100%;
 
-    font-size:
-        clamp(.88rem, 3.8vw, 1rem);
+            text-align: center;
 
-    line-height: 1.6;
+            position: relative;
 
-    font-weight: 350;
-}
+            z-index: 1;
+        }
 
-/* --------------------------------
-   COUNTDOWN
--------------------------------- */
 
-.countdown {
+        /* ================================
+           BADGE
+        ================================= */
 
-    display: grid;
+        .intent-badge {
 
-    grid-template-columns:
-        repeat(4, minmax(0, 1fr));
+            display: inline-block;
 
-    gap: 8px;
+            background:
+                rgba(226, 92, 114, 0.08);
 
-    margin-top: 34px;
-}
+            border:
+                1px solid
+                rgba(226, 92, 114, 0.25);
 
-/* Time card */
+            color: #f687b3;
 
-.time-box {
+            padding: 6px 16px;
 
-    position: relative;
+            border-radius: 30px;
 
-    padding:
-        18px 6px
-        15px;
+            font-size: .8rem;
 
-    min-width: 0;
+            letter-spacing: 2px;
 
-    border-radius: 15px;
+            text-transform: uppercase;
 
-    background:
-        linear-gradient(
-            145deg,
-            rgba(255,255,255,.065),
-            rgba(255,255,255,.018)
-        );
+            margin-bottom: 25px;
 
-    border: 1px solid var(--border);
+            font-weight: 600;
+        }
 
-    box-shadow:
-        0 12px 35px rgba(0,0,0,.28);
 
-    backdrop-filter: blur(16px);
+        /* ================================
+           HEADING
+        ================================= */
 
-    overflow: hidden;
+        h1 {
 
-    transition:
-        transform .25s ease,
-        border-color .25s ease;
-}
+            font-size:
+                clamp(
+                    1.85rem,
+                    7vw,
+                    2.4rem
+                );
 
-.time-box::before {
+            margin-bottom: 12px;
 
-    content: "";
+            font-weight: 500;
 
-    position: absolute;
+            letter-spacing: -.5px;
 
-    top: 0;
-    left: 20%;
+            line-height: 1.15;
 
-    width: 60%;
-    height: 1px;
+            font-family: Georgia, serif;
 
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            rgba(255,255,255,.25),
-            transparent
-        );
-}
+            background:
+                linear-gradient(
+                    90deg,
+                    #f6ad55,
+                    #f687b3
+                );
 
-.number {
+            -webkit-background-clip: text;
 
-    font-size:
-        clamp(1.8rem, 9vw, 3rem);
+            -webkit-text-fill-color: transparent;
+        }
 
-    font-weight: 400;
 
-    line-height: 1;
+        /* ================================
+           SUBTITLE
+        ================================= */
 
-    letter-spacing: -1px;
+        .subtitle {
 
-    font-variant-numeric:
-        tabular-nums;
+            font-size:
+                clamp(
+                    .92rem,
+                    3.8vw,
+                    1.05rem
+                );
 
-    color: #ffffff;
+            color: #cbd5e0;
 
-    margin-bottom: 8px;
-}
+            margin-bottom: 42px;
 
-.label {
+            line-height: 1.6;
 
-    font-size:
-        clamp(.54rem, 2.5vw, .68rem);
+            font-weight: 300;
 
-    letter-spacing:
-        clamp(1px, .5vw, 1.8px);
+            padding: 0 8px;
+        }
 
-    text-transform: uppercase;
 
-    color: #777b87;
+        /* ================================
+           COUNTDOWN
+        ================================= */
 
-    font-weight: 600;
-}
+        .countdown-display {
 
-/* Tick animation */
+            display: grid;
 
-.tick {
+            grid-template-columns:
+                repeat(4, minmax(0, 1fr));
 
-    animation:
-        tick .35s
-        cubic-bezier(.2,.8,.3,1);
-}
+            gap: 12px;
 
-@keyframes tick {
+            margin-bottom: 38px;
 
-    0% {
-        transform: translateY(4px) scale(.92);
-        opacity: .35;
-    }
+            width: 100%;
+        }
 
-    100% {
-        transform: translateY(0) scale(1);
-        opacity: 1;
-    }
-}
 
-/* --------------------------------
-   EXPERIMENT STATUS
--------------------------------- */
+        /* ================================
+           TIME BOX
+        ================================= */
 
-.status {
+        .time-box {
 
-    display: flex;
+            background:
+                rgba(35, 20, 24, 0.4);
 
-    align-items: center;
-    justify-content: center;
+            backdrop-filter:
+                blur(15px);
 
-    gap: 8px;
+            -webkit-backdrop-filter:
+                blur(15px);
 
-    margin-top: 25px;
+            border:
+                1px solid
+                rgba(226, 92, 114, 0.15);
 
-    color: #737783;
+            padding:
+                21px 7px;
 
-    font-size: 10px;
+            border-radius: 16px;
 
-    letter-spacing: 1.7px;
+            box-shadow:
+                0 10px 30px
+                rgba(0, 0, 0, 0.4);
 
-    text-transform: uppercase;
-}
+            position: relative;
 
-.status-line {
+            min-width: 0;
 
-    width: 20px;
-    height: 1px;
+            /*
+               IMPORTANT:
+               Keep the card completely static.
+               No transform animation here.
+            */
+        }
 
-    background:
-        linear-gradient(
-            90deg,
-            transparent,
-            #555967
-        );
-}
 
-.status-line.right {
+        /* ================================
+           NUMBER WRAPPER
+        ================================= */
 
-    background:
-        linear-gradient(
-            90deg,
-            #555967,
-            transparent
-        );
-}
+        .number {
 
-/* --------------------------------
-   THEME WORDS
--------------------------------- */
+            font-size:
+                clamp(
+                    2rem,
+                    9vw,
+                    3.2rem
+                );
 
-.exploration {
+            font-weight: 400;
 
-    display: flex;
+            color: #fff;
 
-    justify-content: center;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                sans-serif;
 
-    align-items: center;
+            line-height: 1;
 
-    gap: 0;
+            margin-bottom: 8px;
 
-    margin-top: 31px;
+            font-variant-numeric:
+                tabular-nums;
 
-    padding-top: 22px;
+            /*
+               Fixed visual area prevents
+               any layout jump.
+            */
 
-    border-top:
-        1px solid
-        rgba(255,255,255,.055);
-}
+            min-height:
+                clamp(
+                    32px,
+                    9vw,
+                    52px
+                );
 
-.explore-item {
+            display: flex;
 
-    padding:
-        0 13px;
+            align-items: center;
 
-    color: #777b87;
+            justify-content: center;
 
-    font-size:
-        clamp(.58rem, 2.5vw, .7rem);
+            /*
+               Animation happens only on
+               the text itself.
+            */
 
-    letter-spacing:
-        clamp(1px, .5vw, 1.8px);
+            will-change: opacity;
+        }
 
-    text-transform: uppercase;
 
-    font-weight: 600;
+        /* ================================
+           SECOND CHANGE ANIMATION
+        ================================= */
 
-    position: relative;
-}
+        .animate-tick {
 
-.explore-item:not(:last-child)::after {
+            animation:
+                numberTick
+                .28s
+                ease-out;
+        }
 
-    content: "·";
 
-    position: absolute;
+        @keyframes numberTick {
 
-    right: -2px;
+            0% {
 
-    color: #4d505b;
-}
+                opacity: .25;
 
-/* --------------------------------
-   ARRIVAL MESSAGE
--------------------------------- */
+                filter:
+                    blur(2px);
+            }
 
-#message {
+            45% {
 
-    display: none;
+                opacity: .75;
 
-    margin-top: 35px;
+                filter:
+                    blur(.5px);
+            }
 
-    font-family: Georgia, serif;
+            100% {
 
-    font-size:
-        clamp(1.5rem, 7vw, 2.3rem);
+                opacity: 1;
 
-    color: #ff9fb5;
+                filter:
+                    blur(0);
+            }
+        }
 
-    line-height: 1.3;
 
-    text-shadow:
-        0 0 25px
-        rgba(255,107,138,.3);
-}
+        /* ================================
+           LABEL
+        ================================= */
 
-/* --------------------------------
-   MOBILE
--------------------------------- */
+        .label {
 
-@media (max-width: 380px) {
+            font-size:
+                clamp(
+                    .58rem,
+                    2.5vw,
+                    .75rem
+                );
 
-    body {
-        padding-left: 12px;
-        padding-right: 12px;
-    }
+            text-transform: uppercase;
 
-    .countdown {
-        gap: 6px;
-        margin-top: 28px;
-    }
+            letter-spacing:
+                clamp(
+                    1px,
+                    .45vw,
+                    2px
+                );
 
-    .time-box {
-        padding:
-            15px 3px
-            13px;
+            color: #a0aec0;
 
-        border-radius: 13px;
-    }
+            white-space: nowrap;
+        }
 
-    .number {
-        font-size: 1.75rem;
-    }
 
-    .label {
-        font-size: .5rem;
-    }
+        /* ================================
+           PILLARS
+        ================================= */
 
-    .explore-item {
-        padding: 0 9px;
-    }
-}
+        .pillars {
 
-/* --------------------------------
-   VERY SMALL HEIGHT DEVICES
--------------------------------- */
+            display: flex;
 
-@media (max-height: 650px) {
+            justify-content: center;
 
-    .eyebrow {
-        margin-bottom: 14px;
-    }
+            align-items: center;
 
-    h1 {
-        margin-bottom: 9px;
-    }
+            gap: 0;
 
-    .countdown {
-        margin-top: 23px;
-    }
+            margin-top: 20px;
 
-    .exploration {
-        margin-top: 22px;
-        padding-top: 17px;
-    }
-}
+            border-top:
+                1px solid
+                rgba(255, 255, 255, 0.05);
 
-/* --------------------------------
-   REDUCED MOTION
--------------------------------- */
+            padding-top: 30px;
 
-@media (prefers-reduced-motion: reduce) {
+            width: 100%;
+        }
 
-    *,
-    *::before,
-    *::after {
-        animation-duration: .01ms !important;
-        animation-iteration-count: 1 !important;
-        scroll-behavior: auto !important;
-    }
-}
-</style>
+
+        .pillar-item {
+
+            font-size:
+                clamp(
+                    .62rem,
+                    2.8vw,
+                    .85rem
+                );
+
+            letter-spacing:
+                clamp(
+                    1px,
+                    .4vw,
+                    1.5px
+                );
+
+            text-transform: uppercase;
+
+            color: #a0aec0;
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 6px;
+
+            white-space: nowrap;
+
+            padding:
+                0 12px;
+
+            position: relative;
+        }
+
+
+        /*
+           Small separator
+        */
+
+        .pillar-item:not(:last-child)::after {
+
+            content: "·";
+
+            position: absolute;
+
+            right: -2px;
+
+            color:
+                rgba(255,255,255,.22);
+        }
+
+
+        .pillar-item span {
+
+            color: #e25c72;
+
+            font-size: 1em;
+        }
+
+
+        /* ================================
+           MESSAGE
+        ================================= */
+
+        #message {
+
+            font-size:
+                clamp(
+                    1.7rem,
+                    7vw,
+                    2.2rem
+                );
+
+            font-family: Georgia, serif;
+
+            color: #f687b3;
+
+            display: none;
+
+            margin-top: 20px;
+
+            line-height: 1.3;
+
+            text-shadow:
+                0 0 15px
+                rgba(246, 135, 179, 0.3);
+        }
+
+
+        /* ================================
+           SMALL MOBILE
+        ================================= */
+
+        @media (max-width: 420px) {
+
+            body {
+
+                padding-left: 12px;
+                padding-right: 12px;
+            }
+
+
+            .intent-badge {
+
+                font-size: .67rem;
+
+                letter-spacing:
+                    1.5px;
+
+                padding:
+                    6px 12px;
+
+                margin-bottom: 20px;
+            }
+
+
+            h1 {
+
+                font-size:
+                    clamp(
+                        1.7rem,
+                        8vw,
+                        2rem
+                    );
+
+                margin-bottom: 10px;
+            }
+
+
+            .subtitle {
+
+                margin-bottom: 30px;
+
+                font-size: .9rem;
+            }
+
+
+            .countdown-display {
+
+                gap: 7px;
+
+                margin-bottom: 32px;
+            }
+
+
+            .time-box {
+
+                padding:
+                    18px 3px;
+
+                border-radius: 13px;
+            }
+
+
+            .number {
+
+                font-size:
+                    clamp(
+                        1.75rem,
+                        9vw,
+                        2.25rem
+                    );
+
+                min-height: 30px;
+            }
+
+
+            .label {
+
+                font-size: .52rem;
+
+                letter-spacing:
+                    .8px;
+            }
+
+
+            .pillars {
+
+                padding-top: 24px;
+            }
+
+
+            .pillar-item {
+
+                padding:
+                    0 7px;
+
+                gap: 4px;
+
+                font-size: .58rem;
+
+                letter-spacing:
+                    1px;
+            }
+        }
+
+
+        /* ================================
+           VERY SMALL PHONES
+        ================================= */
+
+        @media (max-width: 340px) {
+
+            .countdown-display {
+
+                gap: 5px;
+            }
+
+
+            .time-box {
+
+                padding:
+                    16px 2px;
+            }
+
+
+            .number {
+
+                font-size: 1.6rem;
+            }
+
+
+            .label {
+
+                font-size: .47rem;
+            }
+
+
+            .pillar-item {
+
+                padding:
+                    0 5px;
+
+                font-size:
+                    .52rem;
+            }
+        }
+
+
+        /* ================================
+           SHORT SCREENS
+        ================================= */
+
+        @media (max-height: 680px) {
+
+            .intent-badge {
+
+                margin-bottom: 15px;
+            }
+
+
+            h1 {
+
+                margin-bottom: 8px;
+            }
+
+
+            .subtitle {
+
+                margin-bottom: 24px;
+            }
+
+
+            .countdown-display {
+
+                margin-bottom: 25px;
+            }
+
+
+            .time-box {
+
+                padding:
+                    16px 5px;
+            }
+
+
+            .pillars {
+
+                padding-top: 20px;
+            }
+        }
+
+
+        /* ================================
+           REDUCED MOTION
+        ================================= */
+
+        @media (prefers-reduced-motion: reduce) {
+
+            *,
+            *::before,
+            *::after {
+
+                animation-duration:
+                    .01ms !important;
+
+                animation-iteration-count:
+                    1 !important;
+            }
+        }
+
+    </style>
 </head>
+
 
 <body>
 
-<div class="background-glow"></div>
+    <!-- Background Petals -->
+    <div id="petal-container"></div>
 
-<div id="particles"></div>
 
-<main class="container">
+    <div class="container">
 
-    <div class="eyebrow">
-        <span class="eyebrow-dot"></span>
-        Something is unfolding
+        <!-- Existing wording kept -->
+        <div class="intent-badge">
+            A Special Awaited Moment
+        </div>
+
+
+        <h1>
+            Counting the Moments Until We Meet
+        </h1>
+
+
+        <p class="subtitle">
+            Savouring the passing time with shared anticipation.
+        </p>
+
+
+        <!-- Countdown -->
+        <div
+            class="countdown-display"
+            id="countdown-boxes"
+        >
+
+            <div class="time-box">
+
+                <div
+                    class="number"
+                    id="days"
+                >
+                    00
+                </div>
+
+                <div class="label">
+                    Days
+                </div>
+
+            </div>
+
+
+            <div class="time-box">
+
+                <div
+                    class="number"
+                    id="hours"
+                >
+                    00
+                </div>
+
+                <div class="label">
+                    Hours
+                </div>
+
+            </div>
+
+
+            <div class="time-box">
+
+                <div
+                    class="number"
+                    id="minutes"
+                >
+                    00
+                </div>
+
+                <div class="label">
+                    Mins
+                </div>
+
+            </div>
+
+
+            <div class="time-box">
+
+                <div
+                    class="number"
+                    id="seconds"
+                >
+                    00
+                </div>
+
+                <div class="label">
+                    Secs
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Arrival message -->
+        <div id="message">
+            The beautiful moment has arrived. ✨
+        </div>
+
+
+        <!-- Updated concepts -->
+        <div class="pillars">
+
+            <div class="pillar-item">
+                <span>♥</span>
+                Experiment
+            </div>
+
+            <div class="pillar-item">
+                <span>✦</span>
+                Adventure
+            </div>
+
+            <div class="pillar-item">
+                <span>👁</span>
+                Curiosity
+            </div>
+
+        </div>
+
     </div>
 
-    <h1>
-        Counting the Moments
-    </h1>
 
-    <p class="subtitle">
-        One moment at a time.
-        No shortcuts. No spoilers.
-        Just curiosity about what comes next.
-    </p>
+    <script>
 
+        /* ==========================================
+           TARGET
+        ========================================== */
 
-    <section
-        class="countdown"
-        id="countdown"
-        aria-label="Countdown"
-    >
+        const targetDate =
+            new Date(
+                "September 26, 2026 19:30:00"
+            ).getTime();
 
-        <div class="time-box">
-            <div class="number" id="days">00</div>
-            <div class="label">Days</div>
-        </div>
 
-        <div class="time-box">
-            <div class="number" id="hours">00</div>
-            <div class="label">Hours</div>
-        </div>
+        /* ==========================================
+           PREVIOUS VALUES
+        ========================================== */
 
-        <div class="time-box">
-            <div class="number" id="minutes">00</div>
-            <div class="label">Minutes</div>
-        </div>
+        let prevTime = {
 
-        <div class="time-box">
-            <div class="number" id="seconds">00</div>
-            <div class="label">Seconds</div>
-        </div>
+            days: "",
+            hours: "",
+            minutes: "",
+            seconds: ""
 
-    </section>
+        };
 
 
-    <div class="status">
+        /* ==========================================
+           COUNTDOWN UPDATE
+        ========================================== */
 
-        <span class="status-line"></span>
+        function updateCountdown() {
 
-        <span>Experiment in progress</span>
+            const now =
+                Date.now();
 
-        <span class="status-line right"></span>
+            const timeDifference =
+                targetDate - now;
 
-    </div>
 
+            /* -------------------------------
+               TARGET REACHED
+            -------------------------------- */
 
-    <div class="exploration">
+            if (timeDifference <= 0) {
 
-        <div class="explore-item">
-            Curiosity
-        </div>
+                clearInterval(
+                    countdownInterval
+                );
 
-        <div class="explore-item">
-            Adventure
-        </div>
 
-        <div class="explore-item">
-            Experiment
-        </div>
+                document
+                    .getElementById(
+                        "countdown-boxes"
+                    )
+                    .style.display = "none";
 
-    </div>
 
+                document
+                    .getElementById(
+                        "message"
+                    )
+                    .style.display = "block";
 
-    <div id="message">
-        The moment has arrived. ✦
-    </div>
 
-</main>
+                return;
+            }
 
 
-<script>
+            /* -------------------------------
+               CALCULATE
+            -------------------------------- */
 
-/* =================================
-   TARGET DATE
-================================= */
+            const days =
+                String(
+                    Math.floor(
+                        timeDifference /
+                        (1000 * 60 * 60 * 24)
+                    )
+                ).padStart(2, "0");
 
-const targetDate =
-    new Date(
-        "September 26, 2026 19:30:00"
-    ).getTime();
 
+            const hours =
+                String(
+                    Math.floor(
+                        (
+                            timeDifference %
+                            (1000 * 60 * 60 * 24)
+                        ) /
+                        (1000 * 60 * 60)
+                    )
+                ).padStart(2, "0");
 
-/* =================================
-   ELEMENTS
-================================= */
 
-const elements = {
-
-    days:
-        document.getElementById("days"),
-
-    hours:
-        document.getElementById("hours"),
-
-    minutes:
-        document.getElementById("minutes"),
-
-    seconds:
-        document.getElementById("seconds"),
-
-    countdown:
-        document.getElementById("countdown"),
-
-    message:
-        document.getElementById("message")
-
-};
-
-
-/* =================================
-   PREVIOUS VALUES
-================================= */
-
-let previous = {
-
-    days: "",
-    hours: "",
-    minutes: "",
-    seconds: ""
-
-};
-
-
-/* =================================
-   FORMAT
-================================= */
-
-function pad(value) {
-
-    return String(value)
-        .padStart(2, "0");
-
-}
-
-
-/* =================================
-   UPDATE UNIT
-================================= */
-
-function updateUnit(
-    key,
-    value
-) {
-
-    if (previous[key] === value) {
-        return;
-    }
-
-    const element =
-        elements[key];
-
-    element.textContent =
-        value;
-
-    element.classList.remove("tick");
-
-    /* Restart animation */
-    void element.offsetWidth;
-
-    element.classList.add("tick");
-
-    previous[key] = value;
-}
-
-
-/* =================================
-   COUNTDOWN
-================================= */
-
-function updateCountdown() {
-
-    const now =
-        Date.now();
-
-    const difference =
-        targetDate - now;
-
-
-    /* Arrival */
-
-    if (difference <= 0) {
-
-        clearInterval(
-            countdownInterval
-        );
-
-        elements.countdown.style.display =
-            "none";
-
-        elements.message.style.display =
-            "block";
-
-        return;
-    }
-
-
-    const days =
-        Math.floor(
-            difference /
-            (1000 * 60 * 60 * 24)
-        );
-
-
-    const hours =
-        Math.floor(
-            (difference %
-            (1000 * 60 * 60 * 24)) /
-            (1000 * 60 * 60)
-        );
-
-
-    const minutes =
-        Math.floor(
-            (difference %
-            (1000 * 60 * 60)) /
-            (1000 * 60)
-        );
-
-
-    const seconds =
-        Math.floor(
-            (difference %
-            (1000 * 60)) /
-            1000
-        );
-
-
-    updateUnit(
-        "days",
-        pad(days)
-    );
-
-    updateUnit(
-        "hours",
-        pad(hours)
-    );
-
-    updateUnit(
-        "minutes",
-        pad(minutes)
-    );
-
-    updateUnit(
-        "seconds",
-        pad(seconds)
-    );
-}
-
-
-/* =================================
-   PARTICLES
-================================= */
-
-function createParticles() {
-
-    const container =
-        document.getElementById(
-            "particles"
-        );
-
-    const amount =
-        window.innerWidth < 500
-            ? 14
-            : 22;
-
-
-    for (
-        let i = 0;
-        i < amount;
-        i++
-    ) {
-
-        const particle =
-            document.createElement(
-                "div"
+            const minutes =
+                String(
+                    Math.floor(
+                        (
+                            timeDifference %
+                            (1000 * 60 * 60)
+                        ) /
+                        (1000 * 60)
+                    )
+                ).padStart(2, "0");
+
+
+            const seconds =
+                String(
+                    Math.floor(
+                        (
+                            timeDifference %
+                            (1000 * 60)
+                        ) /
+                        1000
+                    )
+                ).padStart(2, "0");
+
+
+            /* -------------------------------
+               RENDER
+            -------------------------------- */
+
+            renderUnit(
+                "days",
+                days
             );
 
-        particle.className =
-            "particle";
+            renderUnit(
+                "hours",
+                hours
+            );
+
+            renderUnit(
+                "minutes",
+                minutes
+            );
+
+            renderUnit(
+                "seconds",
+                seconds
+            );
+        }
 
 
-        particle.style.left =
-            Math.random() * 100 +
-            "vw";
+        /* ==========================================
+           RENDER SINGLE NUMBER
+        ========================================== */
+
+        function renderUnit(
+            id,
+            value
+        ) {
+
+            const element =
+                document.getElementById(id);
 
 
-        particle.style.animationDuration =
-            (10 + Math.random() * 12) +
-            "s";
+            /*
+               Nothing changes if value
+               is still the same.
+            */
+
+            if (
+                prevTime[id] === value
+            ) {
+                return;
+            }
 
 
-        particle.style.animationDelay =
-            (-Math.random() * 15) +
-            "s";
+            /*
+               Update only the number.
+               The card itself never moves.
+            */
+
+            element.textContent =
+                value;
 
 
-        particle.style.opacity =
-            0.15 +
-            Math.random() * 0.35;
+            /*
+               Restart only the text
+               opacity animation.
+            */
+
+            element.classList.remove(
+                "animate-tick"
+            );
 
 
-        const size =
-            2 +
-            Math.random() * 2;
+            void element.offsetWidth;
 
 
-        particle.style.width =
-            size + "px";
-
-        particle.style.height =
-            size + "px";
+            element.classList.add(
+                "animate-tick"
+            );
 
 
-        container.appendChild(
-            particle
-        );
-    }
-}
+            prevTime[id] =
+                value;
+        }
 
 
-/* =================================
-   START
-================================= */
+        /* ==========================================
+           CREATE PETALS
+        ========================================== */
 
-createParticles();
+        function createPetals() {
 
-updateCountdown();
+            const container =
+                document.getElementById(
+                    "petal-container"
+                );
 
-const countdownInterval =
-    setInterval(
-        updateCountdown,
-        1000
-    );
 
-</script>
+            /*
+               Fewer particles on mobile
+               for better performance.
+            */
+
+            const amount =
+                window.innerWidth <= 500
+                    ? 5
+                    : 8;
+
+
+            for (
+                let i = 0;
+                i < amount;
+                i++
+            ) {
+
+                const petal =
+                    document.createElement(
+                        "div"
+                    );
+
+
+                petal.classList.add(
+                    "petal"
+                );
+
+
+                const size =
+                    Math.random() *
+                    12 +
+                    10;
+
+
+                petal.style.left =
+                    Math.random() *
+                    100 +
+                    "vw";
+
+
+                petal.style.width =
+                    size +
+                    "px";
+
+
+                petal.style.height =
+                    size +
+                    "px";
+
+
+                petal.style.animationDelay =
+                    Math.random() *
+                    10 +
+                    "s";
+
+
+                petal.style.animationDuration =
+                    Math.random() *
+                    6 +
+                    10 +
+                    "s";
+
+
+                container.appendChild(
+                    petal
+                );
+            }
+        }
+
+
+        /* ==========================================
+           START
+        ========================================== */
+
+        createPetals();
+
+        updateCountdown();
+
+
+        const countdownInterval =
+            setInterval(
+                updateCountdown,
+                1000
+            );
+
+    </script>
 
 </body>
 </html>
