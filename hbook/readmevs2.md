@@ -575,3 +575,18 @@ License information can be updated when the project is made publicly available.
 **One workspace for employees, attendance, payroll, recruitment and compliance.**
 
 > **Manage people. Simplify payroll. Organize everything.**
+>
+> <p align="center">
+  <img src="https://i.ibb.co/qYXDbTTT/H-book-logo-11zon.png" alt="H Book" width="100">
+</p>
+
+<p align="center">
+  <strong>H Book</strong><br>
+  Manage people. Simplify payroll. Organize everything.
+</p>
+
+<p align="center">
+  Developed by <strong>Er. Harsh Ganjir</strong>
+  <br>
+  <a href="https://erharsh.in">www.erharsh.in</a>
+</p>
