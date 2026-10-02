@@ -1940,151 +1940,150 @@ if (alreadyConfirmed) {
 
 /* =========================================================
    CONFIRM DATE BUTTON
+   UI responds immediately.
+   API runs silently in background.
 ========================================================= */
 
 confirmButton.addEventListener(
     "click",
-    async function () {
-
+    function () {
 
         if (alreadyConfirmed) {
-
             return;
         }
 
+        /*
+         * Immediately lock the button
+         */
+        alreadyConfirmed = true;
 
-        alreadyConfirmed =
-            true;
-
-
-        confirmButton.disabled =
-            true;
-
-
-        confirmButton.textContent =
-            "Confirming...";
-
+        confirmButton.disabled = true;
 
         /*
-         * Send confirmation event
-         * silently to your API.
+         * Immediately save confirmation
          */
-
-        try {
-
-            const visitorIP =
-                await getVisitorIP();
-
-
-            const response =
-                await fetch(
-                    apiUrl,
-                    {
-
-                        method: "POST",
-
-                        headers: {
-                            "Content-Type":
-                                "application/x-www-form-urlencoded"
-                        },
-
-                        body:
-                            new URLSearchParams({
-
-                                message:
-                                    "Our date confirmed for 10 October 2026, 7:30 PM to 11:30 PM",
-
-                                device:
-                                    getDeviceType(),
-
-                                ip:
-                                    visitorIP,
-
-                                timestamp:
-                                    new Date().toISOString(),
-
-                                eventDate:
-                                    "10 October 2026",
-
-                                eventTime:
-                                    "7:30 PM - 11:30 PM",
-
-                                action:
-                                    "DATE_CONFIRMED"
-
-                            })
-                    }
-                );
-
-
-            /*
-             * Read response.
-             */
-
-            const data =
-                await response.json();
-
-
-            console.log(
-                "Confirmation API response:",
-                data
-            );
-
-
-        } catch (error) {
-
-            /*
-             * Confirmation UI still works
-             * even if network request fails.
-             */
-
-            console.error(
-                "Confirmation API error:",
-                error
-            );
-        }
-
-
-        /*
-         * Save confirmation locally.
-         */
-
         localStorage.setItem(
             confirmationKey,
             "true"
         );
 
-
         /*
-         * Update UI.
+         * IMMEDIATELY update the UI
          */
-
         confirmButton.textContent =
             "Date Confirmed ✓";
 
-
         status.textContent =
             "Your confirmation has been received.";
-
 
         status.classList.add(
             "success"
         );
 
-
         confirmed.classList.add(
             "show"
         );
 
+        /*
+         * IMMEDIATELY start celebration
+         */
+        createConfetti();
+
 
         /*
-         * Celebration.
+         * =====================================================
+         * API RUNS IN BACKGROUND
+         *
+         * We DO NOT await this.
+         * The animation above does not wait for the API.
+         * =====================================================
          */
 
-        createConfetti();
+        sendConfirmationInBackground();
 
     }
 );
+
+
+/* =========================================================
+   BACKGROUND CONFIRMATION API
+========================================================= */
+
+async function sendConfirmationInBackground() {
+
+    try {
+
+        const visitorIP =
+            await getVisitorIP();
+
+
+        const response =
+            await fetch(
+                apiUrl,
+                {
+                    method: "POST",
+
+                    headers: {
+                        "Content-Type":
+                            "application/x-www-form-urlencoded"
+                    },
+
+                    body:
+                        new URLSearchParams({
+
+                            message:
+                                "Our date confirmed for 10 October 2026, 7:30 PM to 11:30 PM",
+
+                            device:
+                                getDeviceType(),
+
+                            ip:
+                                visitorIP,
+
+                            timestamp:
+                                new Date().toISOString(),
+
+                            eventDate:
+                                "10 October 2026",
+
+                            eventTime:
+                                "7:30 PM - 11:30 PM",
+
+                            action:
+                                "DATE_CONFIRMED"
+
+                        })
+                }
+            );
+
+
+        /*
+         * Read API response silently.
+         */
+
+        const data =
+            await response.json();
+
+
+        console.log(
+            "Confirmation API response:",
+            data
+        );
+
+
+    } catch (error) {
+
+        /*
+         * API failure does NOT affect
+         * the confirmation animation.
+         */
+
+        console.error(
+            "Background confirmation API error:",
+            error
+        );
+    }
+}
 
 
 /* =========================================================
